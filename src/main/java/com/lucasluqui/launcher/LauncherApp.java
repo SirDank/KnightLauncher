@@ -143,9 +143,9 @@ public class LauncherApp
 
     checkGetdown();
 
-    if (!FileUtil.fileExists(LauncherGlobals.USER_DIR + "/KnightLauncher/modules/safeguard/bundle.zip")) {
-      _modManager.extractSafeguard();
-    }
+    // if (!FileUtil.fileExists(LauncherGlobals.USER_DIR + "/KnightLauncher/modules/safeguard/bundle.zip")) {
+    //   _modManager.extractSafeguard();
+    // }
 
     _launcherCtx.launcherGUI.eventHandler.updateServerList(null);
 
