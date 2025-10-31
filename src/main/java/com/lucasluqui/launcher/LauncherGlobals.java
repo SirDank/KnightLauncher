@@ -7,7 +7,7 @@ import java.io.File;
 public class LauncherGlobals
 {
   public static final String GITHUB_API = "https://api.github.com/";
-  public static final String GITHUB_AUTHOR = "lucasluqui";
+  public static final String GITHUB_AUTHOR = "SirDank";
   public static final String GITHUB_REPO = "KnightLauncher";
   public static final String GITHUB_BRANCH = "main";
 
@@ -19,7 +19,7 @@ public class LauncherGlobals
   public static final String URL_DISCORD = "https://discord.gg/8rE4GeAMza";
   public static final String URL_GET_MODS = "https://discord.gg/fAR8qtrat2";
   public static final String URL_DONATE = "https://ko-fi.com/lucasallegri";
-  public static final String URL_BUG_REPORT = "https://github.com/lucasluqui/KnightLauncher/issues";
+  public static final String URL_BUG_REPORT = "https://github.com/SirDank/KnightLauncher/issues";
 
   public static final String USER_DIR = System.getProperty("user.dir");
 
