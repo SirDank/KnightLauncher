@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # by Crowfunder
 # my gh: https://github.com/Crowfunder
-# KnightLauncher gh: https://github.com/lucasluqui/KnightLauncher
+# KnightLauncher gh: https://github.com/SirDank/KnightLauncher
 
 GREEN="\033[0;32m"
 NONE="\033[0m"
