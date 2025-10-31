@@ -89,8 +89,8 @@ https://discord.gg/RAf499a
 Unless hyperlinked names shown below represent Discord usernames. Hyperlinked names correspond to GitHub accounts.
 
 ### Contributors
-<a href="https://github.com/lucasluqui/KnightLauncher/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=lucasluqui/KnightLauncher" />
+<a href="https://github.com/SirDank/KnightLauncher/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=SirDank/KnightLauncher" />
 </a>
 
 ### Translators
