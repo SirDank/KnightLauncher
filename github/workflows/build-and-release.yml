@@ -1,0 +1,68 @@
+name: Build and Release
+
+on:
+  workflow_dispatch
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java 1.8
+        uses: actions/setup-java@v4
+        with:
+          java-version: '1.8'
+          distribution: 'temurin'
+
+      - name: Build with Maven
+        run: mvn -Denv=prod clean package
+
+      - name: Extract version from pom.xml
+        run: |
+          VERSION=$(grep '<version>' pom.xml | head -1 | sed 's/.*<version>\(.*\)<\/version>.*/\1/')
+          VERSION=${VERSION%-SNAPSHOT}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Create README.txt
+        run: |
+          cat > README.txt << 'EOF'
+Place the .jar file in your game's root directory and then double click it.
+If that does not work, drag and drop the .bat or .sh script file (depending of your operating system) to that same directory
+and double click it.
+
+.BAT script (Windows):
+https://github.com/SirDank/KnightLauncher/blob/main/scripts/KnightLauncher_windows.bat
+
+.SH script (macOS, Linux):
+https://github.com/SirDank/KnightLauncher/blob/main/scripts/KnightLauncher_mac_linux.sh
+
+
+For a more detailed guide please click the following link:
+https://github.com/SirDank/KnightLauncher?tab=readme-ov-file#downloading--installing
+
+Thanks for downloading Knight Launcher!
+
+---------------------------------------------------------------
+
+Author: https://github.com/SirDank
+Source: https://github.com/SirDank/KnightLauncher
+Releases: https://github.com/SirDank/KnightLauncher/releases
+Discord: https://discord.gg/8rE4GeAMza
+EOF
+
+      - name: Create ZIP archive
+        run: zip -j KnightLauncher-${{ env.VERSION }}.zip target/KnightLauncher.jar README.txt
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ env.VERSION }}
+          name: Knight Launcher ${{ env.VERSION }}
+          draft: false
+          prerelease: false
+          files: KnightLauncher-${{ env.VERSION }}.zip
