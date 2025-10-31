@@ -39,7 +39,7 @@ case $opt in
 
         # Downloading and installing new version.
         echo "Downloading..."
-        curl -sSL https://api.github.com/repos/lucasluqui/KnightLauncher/releases/latest | grep "browser_download_url" | cut -d : -f 2,3 | tr -d \" | wget --show-progress -O "${filename}" -qi -
+        curl -sSL https://api.github.com/repos/SirDank/KnightLauncher/releases/latest | grep "browser_download_url" | cut -d : -f 2,3 | tr -d \" | wget --show-progress -O "${filename}" -qi -
         echo -e "${GREEN}Successfully downloaded ${filename}${NONE}\nExtracting..."
         mv "${filename}" "${skpath}/${filename}"
         unzip "${skpath}/${filename}" -d "${skpath}"
