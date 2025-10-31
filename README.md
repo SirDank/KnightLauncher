@@ -94,7 +94,7 @@ Unless hyperlinked names shown below represent Discord usernames. Hyperlinked na
 </a>
 
 ### Translators
-Translators are credited in their respective language file, [click here to browse](https://github.com/lucasluqui/KnightLauncher/tree/main/src/main/resources/rsrc/lang).
+Translators are credited in their respective language file, [click here to browse](https://github.com/SirDank/KnightLauncher/tree/main/src/main/resources/rsrc/lang).
 
 Thank you all for helping to make Knight Launcher usable for everyone worldwide!
 
