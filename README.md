@@ -3,9 +3,9 @@
 </p>
 <h1 align="center">Knight Launcher</h1>
 <p align="center">
-    <a href="https://github.com/lucasluqui/KnightLauncher/blob/main/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/lucasluqui/KnightLauncher?style=flat-square"></a>
-    <a href="https://github.com/lucasluqui/KnightLauncher/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/lucasluqui/KnightLauncher?style=flat-square"></a>
-    <a href="https://github.com/lucasluqui/KnightLauncher/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/lucasluqui/KnightLauncher?style=flat-square"></a>
+    <a href="https://github.com/SirDank/KnightLauncher/blob/main/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/SirDank/KnightLauncher?style=flat-square"></a>
+    <a href="https://github.com/SirDank/KnightLauncher/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/SirDank/KnightLauncher?style=flat-square"></a>
+    <a href="https://github.com/SirDank/KnightLauncher/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/SirDank/KnightLauncher?style=flat-square"></a>
 </p>
 <p align="center">
     <a href="https://github.com/lucasluqui/KnightLauncher/releases/"><img alt="Total downloads" src="https://img.shields.io/github/downloads/lucasluqui/KnightLauncher/total.svg"></a>
