@@ -47,7 +47,7 @@ Still not working? Open a post in [Discord's tech support channel](https://disco
 ## Updating
 
 The launcher is capable of auto-updating itself given the option is enabled in the launcher's settings, which will be by default. To manually update, follow these steps:
-1. Download the latest Knight Launcher release ZIP file [here](https://github.com/lucasluqui/KnightLauncher/releases/latest).
+1. Download the latest Knight Launcher release ZIP file [here](https://github.com/SirDank/KnightLauncher/releases/latest).
 2. Extract the downloaded ZIP file to your Spiral Knights folder, the same way you did when installing it for the first time. Guidance on finding your game folder can be found above at "Downloading & Installing."
 
 After following those steps, the launcher will be up to date.
@@ -66,7 +66,7 @@ To build Knight Launcher manually, follow these steps:
      - **macOS (Homebrew)**: `brew install git`.
      - **Linux (APT)**: `apt install git`.
 2. Clone the repository.
-   - `git clone https://github.com/lucasluqui/KnightLauncher.git`
+   - `git clone https://github.com/SirDank/KnightLauncher.git`
 3. Copy `projectx-pcode.jar` from your Spiral Knights `code` directory into the project's `lib` directory.
 4. Create a copy of `deploy.properties.template` in the repository's root directory then remove the `.template` extension. Fill any missing values.
 5. Validate all Maven dependencies.
