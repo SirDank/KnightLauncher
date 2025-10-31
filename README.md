@@ -8,7 +8,7 @@
     <a href="https://github.com/SirDank/KnightLauncher/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/SirDank/KnightLauncher?style=flat-square"></a>
 </p>
 <p align="center">
-    <a href="https://github.com/lucasluqui/KnightLauncher/releases/"><img alt="Total downloads" src="https://img.shields.io/github/downloads/lucasluqui/KnightLauncher/total.svg"></a>
+    <a href="https://github.com/SirDank/KnightLauncher/releases/"><img alt="Total downloads" src="https://img.shields.io/github/downloads/SirDank/KnightLauncher/total.svg"></a>
     <a href="https://discord.gg/RAf499a"><img alt="Discord" src="https://img.shields.io/discord/653349356459786240" target="_blank"></a>
 </p>
 
