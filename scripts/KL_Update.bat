@@ -10,7 +10,7 @@
 SET regkeys[1]="HKEY_CURRENT_USER\SOFTWARE\Grey Havens\Spiral Knights"
 SET regkeys[2]="HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Valve\Steam"
 SET api_url="https://api.github.com/repos/SirDank/KnightLauncher/releases/latest"
-SET download_url="https://github.com/lucasluqui/KnightLauncher/releases/download/"
+SET download_url="https://github.com/SirDank/KnightLauncher/releases/download/"
 SET filename=KnightLauncher.zip
 SET javaurl="https://javadl.oracle.com/webapps/download/AutoDL?BundleId=245057_d3c52aa6bfa54d3ca74e617f18309292"
 SET javafname=jre_kl.exe
