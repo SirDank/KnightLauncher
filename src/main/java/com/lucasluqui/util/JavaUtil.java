@@ -23,11 +23,11 @@ public class JavaUtil
 
   public static String getJVMVersionOutput (String path)
   {
-    String output;
+    String output = "";
     if (SystemUtil.isWindows()) {
-      output = ProcessUtil.runAndCapture(new String[]{"cmd.exe", "/C", path, "-version"})[1];
+      output = ProcessUtil.runAndCapture(new String[] { "cmd.exe", "/C", path, "-version" })[1];
     } else {
-      output = ProcessUtil.runAndCapture(new String[]{"/bin/bash", "-c", path + " -version"})[1];
+      output = ProcessUtil.runAndCapture(new String[] { "/bin/bash", "-c", "\"" + path + "\" -version" })[1];
     }
     return output;
   }
@@ -147,14 +147,21 @@ public class JavaUtil
       }
     }
 
-    File javaVMDir = new File(startingDirPath, "/java_vm");
-    if (javaVMDir.exists() && javaVMDir.isDirectory() && SystemUtil.isWindows()) {
+    /*
+      Exclude linux users from possibly matching a java_vm directory.
+      They might have installed from Steam which downloads Windows files
+      which also have a java_vm folder, but meant to be run with Proton...
+     */
+    File javaVMDir = new File(startingDirPath, "java_vm");
+    if (javaVMDir.exists() && javaVMDir.isDirectory() && !SystemUtil.isUnix()) {
       return javaVMDir.getAbsolutePath();
     }
-    File javaDir = new File(startingDirPath, "/java");
+
+    File javaDir = new File(startingDirPath, "java");
     if (javaDir.exists() && javaDir.isDirectory()) {
       return javaDir.getAbsolutePath();
     }
+
     return "";
   }
 

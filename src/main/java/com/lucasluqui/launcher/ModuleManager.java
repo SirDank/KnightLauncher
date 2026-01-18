@@ -2,12 +2,14 @@ package com.lucasluqui.launcher;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.SettingsManager;
 import com.lucasluqui.util.FileUtil;
 import com.lucasluqui.util.JavaUtil;
 import com.lucasluqui.util.SystemUtil;
 import com.lucasluqui.util.ZipUtil;
 
+import java.io.File;
 import java.io.IOException;
 
 import static com.lucasluqui.launcher.Log.log;
@@ -32,6 +34,7 @@ public class ModuleManager
     Thread moduleThread = new Thread(() -> {
       loadIngameRPC();
       loadJarCommandLine();
+      if (SystemUtil.isUnix()) loadFroth();
     });
     moduleThread.start();
   }
@@ -64,6 +67,22 @@ public class ModuleManager
       }
     } catch (IOException e) {
       log.error(e);
+    }
+  }
+
+  protected void loadFroth ()
+  {
+    // Experimental feature: Extract a 64-bit version of libfroth for Linux steam users.
+    // Also make sure we're only doing so once.
+    if (Settings.gamePlatform.equalsIgnoreCase("Steam")) {
+      if (!FileUtil.fileExists(LauncherGlobals.USER_DIR + File.separator + "native" + File.separator + "libfroth64.so")) {
+        try {
+          ZipUtil.extractFileWithinJar("/rsrc/modules/linuxfroth/libfroth.so", LauncherGlobals.USER_DIR + File.separator + "native" + File.separator + "libfroth.so");
+          ZipUtil.extractFileWithinJar("/rsrc/modules/linuxfroth/libfroth.so", LauncherGlobals.USER_DIR + File.separator + "native" + File.separator + "libfroth64.so");
+        } catch (IOException e) {
+          log.error(e);
+        }
+      }
     }
   }
 

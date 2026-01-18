@@ -83,6 +83,16 @@ public class LauncherEventHandler
       Server selectedServer = _flamingoManager.getSelectedServer();
       String sanitizedServerName = selectedServer.getSanitizedName();
 
+      // check if any game update took place since last launch.
+      if (_modManager.gameVersionChanged()) {
+        _modManager.checkInstalled();
+        _modManager.mount();
+
+        // re-lock server switching and launch button after mounting.
+        this.updateServerSwitcher(true);
+        this.gui.launchButton.setEnabled(false);
+      }
+
       if (selectedServer.isOfficial()) {
         // start: official servers launch procedure
         if (_modManager.getMountRequired()) {

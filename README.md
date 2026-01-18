@@ -1,14 +1,14 @@
 <p align="center">
-    <img src="https://github.com/SirDank/KnightLauncher/blob/main/src/main/resources/rsrc/img/icon-128.png?raw=true" height="128">
+    <img src="https://github.com/lucasluqui/KnightLauncher/blob/main/src/main/resources/rsrc/img/icon-128.png?raw=true" height="128">
 </p>
 <h1 align="center">Knight Launcher</h1>
 <p align="center">
-    <a href="https://github.com/SirDank/KnightLauncher/blob/main/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/SirDank/KnightLauncher?style=flat-square"></a>
-    <a href="https://github.com/SirDank/KnightLauncher/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/SirDank/KnightLauncher?style=flat-square"></a>
-    <a href="https://github.com/SirDank/KnightLauncher/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/SirDank/KnightLauncher?style=flat-square"></a>
+    <a href="https://github.com/lucasluqui/KnightLauncher/blob/main/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/lucasluqui/KnightLauncher?style=flat-square"></a>
+    <a href="https://github.com/lucasluqui/KnightLauncher/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/lucasluqui/KnightLauncher?style=flat-square"></a>
+    <a href="https://github.com/lucasluqui/KnightLauncher/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/lucasluqui/KnightLauncher?style=flat-square"></a>
 </p>
 <p align="center">
-    <a href="https://github.com/SirDank/KnightLauncher/releases/"><img alt="Total downloads" src="https://img.shields.io/github/downloads/SirDank/KnightLauncher/total.svg"></a>
+    <a href="https://github.com/lucasluqui/KnightLauncher/releases/"><img alt="Total downloads" src="https://img.shields.io/github/downloads/lucasluqui/KnightLauncher/total.svg"></a>
     <a href="https://discord.gg/RAf499a"><img alt="Discord" src="https://img.shields.io/discord/653349356459786240" target="_blank"></a>
 </p>
 
@@ -26,28 +26,41 @@ Open source game launcher for Spiral Knights. Supports automatic 64-bit Java VM 
 - Intuitive and user-friendly UI for configuring advanced Java VM settings.
 - Discord integration that shows your current game activity on your Discord status. This feature is only available on Windows.
 - Launch alt accounts with lesser resources assigned to them avoiding losing performance on your main instance.
-- Future-proofed to support third party servers. Third party server support __**will not**__ be enabled while Grey Havens' Official servers are still online, unless explicitly permitted by their respective right owners and/or law.
+- Future-proofed to support third party servers. Third party server support <ins>**will not**</ins> be enabled while Grey Havens' Official servers are still online, unless explicitly permitted by their respective right owners and/or law.
 - And more...
 
 ## Downloading & Installing
 
 1. Prerequisites:
-   - [Java](https://www.java.com/en/download/) installed.
-2. Download the latest Knight Launcher release ZIP file [here](https://github.com/SirDank/KnightLauncher/releases/latest).
-3. Extract the downloaded `KnightLauncher-x.x.x.zip` ZIP file to your Spiral Knights folder (`x.x.x` will vary depending on the current version).
-   - **Windows**: Steam installations can be found by right-clicking the game on your Steam library and selecting "Manage" → "Browse Local Files," you can also look for it at `<Your Steam Folder>\steamapps\common\Spiral Knights`. Standalone installations can be found by right-clicking the Spiral Knights shortcut on your desktop and then clicking "Open File Location," you can also look for it at `<Your User Folder>\AppData\LocalLow\spiral`.
-   - **macOS**: Steam installations can be found at `/Users/<Your User Folder>/Library/Application Support/Steam/steamapps/common/Spiral Knights/`. Standalone installations can be found at `/Users/<Your User Folder>/Library/Application Support/spiral`. For both types of installations you'll find a `Spiral Knights.app` file which you need to open, then browse to `Contents/Resources/Java`, this is the game's folder.
-   - **Linux**: Steam installations are not natively supported, but the launcher will still call Steam and launch through Proton if you place Knight Launcher's JAR file in the game's folder. Standalone installations are found at your user's home folder then `.getdown/spiral`.
-   - Bear in mind that these are the *usual* installation locations, your mileage may vary.
-4. Double-click the `KnightLauncher.jar` JAR file. The launcher should now boot up.
-5. If nothing happens, double-click the `KnightLauncher_windows.bat` file or `KnightLauncher_mac_linux.sh` file depending on your operating system.
+   - Java installed.
+     - **Windows**: You can get the Java installer [from here](https://www.java.com/en/download/).
+     - **macOS**: Java is already installed by default.
+     - **Linux**: Open your terminal and run any of these to install Java, depending on your package manager: `apt install default-jre`, `yum install java`, `pacman -S jre-openjdk`, `apk add openjdk8`. 
+2. Download the latest Knight Launcher release ZIP file [here](https://github.com/lucasluqui/KnightLauncher/releases/latest).
+3. Extract the downloaded `KnightLauncher-x.x.x.zip` ZIP file to your Spiral Knights directory (`x.x.x` will vary depending on the current version).
+   - <ins>**Windows**</ins>:
+     - **Steam**: Steam installations can be found by right-clicking the game on your Steam library and selecting "Manage" → "Browse Local Files," you can also look for it at `<Your Steam Folder>\steamapps\common\Spiral Knights`.
+     - **Standalone**: Standalone installations can be found by right-clicking the Spiral Knights shortcut on your desktop and then clicking "Open File Location," you can also look for it at `<Your User Folder>\AppData\LocalLow\spiral`.
+   - <ins>**macOS**</ins>:
+     - **Steam**: Steam installations can be found by right-clicking the game on your Steam library, selecting "Manage" → "Browse Local Files," then right click the "Spiral Knights" application file and select "Show Package Contents". Once this is done, browse to `Contents/Resources/Java`. This is where you must extract the zip file you downloaded earlier.
+     - **Standalone**: Standalone installations can be found by searching "Spiral Knights" in Applications, then right click on the result and select "Show in Finder", finally right click the "Spiral Knights" Application file and select "Show Package Contents", and browse to `Contents/Resources/Java`. This is where you must extract the zip file you downloaded earlier.
+   - <ins>**Linux**</ins>:
+     - **Steam**: Steam installations are not natively supported, but the launcher will still call Steam and launch through Proton if you place Knight Launcher's JAR file in the game's directory.
+     - **Standalone**: Standalone installations are found at your user's home folder then `.getdown/spiral`.
 
-Still not working? Open a post in [Discord's tech support channel](https://discord.gg/m6TT9PM9B7).
+> [!NOTE]
+> Bear in mind that those are the *usual* installation locations, your mileage may vary.
+
+5. Double-click the `KnightLauncher.jar` JAR file. The launcher should now boot up.
+   - **For macOS users**: If a window pops up displaying "macOS cannot verify that this app is free from malware" click on "Done", then go to your System Settings → Privacy & Security, scroll to the very bottom of this panel, and where it says "KnightLauncher.jar was blocked to protect your Mac." click on "Open Anyway", then "Open Anyway" again on the pop up message that appears afterwards, and finally verify using Touch ID or your user's password. This should prevent the first pop up from appearing again.
+7. If nothing happens, double-click the `KnightLauncher_windows.bat` file or `KnightLauncher_mac_linux.sh` file depending on your operating system.
+
+Still not working? Open a thread in [Discord's tech support channel](https://discord.gg/m6TT9PM9B7) so the community can help you.
 
 ## Updating
 
 The launcher is capable of auto-updating itself given the option is enabled in the launcher's settings, which will be by default. To manually update, follow these steps:
-1. Download the latest Knight Launcher release ZIP file [here](https://github.com/SirDank/KnightLauncher/releases/latest).
+1. Download the latest Knight Launcher release ZIP file [here](https://github.com/lucasluqui/KnightLauncher/releases/latest).
 2. Extract the downloaded ZIP file to your Spiral Knights folder, the same way you did when installing it for the first time. Guidance on finding your game folder can be found above at "Downloading & Installing."
 
 After following those steps, the launcher will be up to date.
@@ -66,7 +79,7 @@ To build Knight Launcher manually, follow these steps:
      - **macOS (Homebrew)**: `brew install git`.
      - **Linux (APT)**: `apt install git`.
 2. Clone the repository.
-   - `git clone https://github.com/SirDank/KnightLauncher.git`
+   - `git clone https://github.com/lucasluqui/KnightLauncher.git`
 3. Copy `projectx-pcode.jar` from your Spiral Knights `code` directory into the project's `lib` directory.
 4. Create a copy of `deploy.properties.template` in the repository's root directory then remove the `.template` extension. Fill any missing values.
 5. Validate all Maven dependencies.
@@ -89,12 +102,12 @@ https://discord.gg/RAf499a
 Unless hyperlinked names shown below represent Discord usernames. Hyperlinked names correspond to GitHub accounts.
 
 ### Contributors
-<a href="https://github.com/SirDank/KnightLauncher/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=SirDank/KnightLauncher" />
+<a href="https://github.com/lucasluqui/KnightLauncher/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=lucasluqui/KnightLauncher" />
 </a>
 
 ### Translators
-Translators are credited in their respective language file, [click here to browse](https://github.com/SirDank/KnightLauncher/tree/main/src/main/resources/rsrc/lang).
+Translators are credited in their respective language file, [click here to browse](https://github.com/lucasluqui/KnightLauncher/tree/main/src/main/resources/rsrc/lang).
 
 Thank you all for helping to make Knight Launcher usable for everyone worldwide!
 

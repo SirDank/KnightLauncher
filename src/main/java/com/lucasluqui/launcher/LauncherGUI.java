@@ -6,15 +6,18 @@ import com.lucasluqui.dialog.Dialog;
 import com.lucasluqui.discord.DiscordPresenceClient;
 import com.lucasluqui.launcher.flamingo.FlamingoManager;
 import com.lucasluqui.launcher.setting.Settings;
+import com.lucasluqui.swing.SmoothProgressBar;
 import com.lucasluqui.util.*;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
+import org.madlonkay.desktopsupport.DesktopSupport;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -40,6 +43,20 @@ public class LauncherGUI extends BaseGUI
   public void init ()
   {
     try {
+      // macOS shenanigans to get the app to have a dock image.
+      // Tends to fail on anything that's not 26+ (Tahoe).
+      if (SystemUtil.isMac()) {
+        try {
+          Image image = Toolkit.getDefaultToolkit().getImage(
+            LauncherGlobals.USER_DIR + File.separator + "KnightLauncher" + File.separator + "images" + File.separator + "icon-512.png"
+          );
+          DesktopSupport.getSupport().setDockIconImage(image);
+        } catch (Exception e) {
+          log.error("Failed to set macOS dock image", e);
+        }
+      }
+
+      // Now proceed to create the main launcher GUI.
       compose();
     } catch (UnsatisfiedLinkError e) {
       // Some Windows installations don't allow you to write to the default temp dir and throw this error instead
@@ -521,7 +538,7 @@ public class LauncherGUI extends BaseGUI
     mainPane.add(launchState);
     mainPane.setComponentZOrder(launchState, 0);
 
-    launchProgressBar = new JProgressBar();
+    launchProgressBar = new SmoothProgressBar();
     launchProgressBar.setBounds(43, 449, 416, 25);
     launchProgressBar.setVisible(false);
     launchProgressBar.putClientProperty(FlatClientProperties.STYLE, "arc: 35;");
@@ -768,7 +785,7 @@ public class LauncherGUI extends BaseGUI
   public JButton playAnimatedBannersButton;
   public JLabel launchBackground;
   public JLabel launchState;
-  public JProgressBar launchProgressBar = new JProgressBar();
+  public SmoothProgressBar launchProgressBar = new SmoothProgressBar();
   public JButton warningNotice;
   public JLabel altModeEnabledLabel;
 
