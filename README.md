@@ -1,14 +1,14 @@
 <p align="center">
-    <img src="https://github.com/lucasluqui/KnightLauncher/blob/main/src/main/resources/rsrc/img/icon-128.png?raw=true" height="128">
+    <img src="https://github.com/SirDank/KnightLauncher/blob/main/src/main/resources/rsrc/img/icon-128.png?raw=true" height="128">
 </p>
 <h1 align="center">Knight Launcher</h1>
 <p align="center">
-    <a href="https://github.com/lucasluqui/KnightLauncher/blob/main/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/lucasluqui/KnightLauncher?style=flat-square"></a>
-    <a href="https://github.com/lucasluqui/KnightLauncher/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/lucasluqui/KnightLauncher?style=flat-square"></a>
-    <a href="https://github.com/lucasluqui/KnightLauncher/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/lucasluqui/KnightLauncher?style=flat-square"></a>
+    <a href="https://github.com/SirDank/KnightLauncher/blob/main/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/lucasluqui/KnightLauncher?style=flat-square"></a>
+    <a href="https://github.com/SirDank/KnightLauncher/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/lucasluqui/KnightLauncher?style=flat-square"></a>
+    <a href="https://github.com/SirDank/KnightLauncher/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/lucasluqui/KnightLauncher?style=flat-square"></a>
 </p>
 <p align="center">
-    <a href="https://github.com/lucasluqui/KnightLauncher/releases/"><img alt="Total downloads" src="https://img.shields.io/github/downloads/lucasluqui/KnightLauncher/total.svg"></a>
+    <a href="https://github.com/SirDank/KnightLauncher/releases/"><img alt="Total downloads" src="https://img.shields.io/github/downloads/lucasluqui/KnightLauncher/total.svg"></a>
     <a href="https://discord.gg/RAf499a"><img alt="Discord" src="https://img.shields.io/discord/653349356459786240" target="_blank"></a>
 </p>
 
@@ -36,7 +36,7 @@ Open source game launcher for Spiral Knights. Supports automatic 64-bit Java VM 
      - **Windows**: You can get the Java installer [from here](https://www.java.com/en/download/).
      - **macOS**: Java is already installed by default.
      - **Linux**: Open your terminal and run any of these to install Java, depending on your package manager: `apt install default-jre`, `yum install java`, `pacman -S jre-openjdk`, `apk add openjdk8`. 
-2. Download the latest Knight Launcher release ZIP file [here](https://github.com/lucasluqui/KnightLauncher/releases/latest).
+2. Download the latest Knight Launcher release ZIP file [here](https://github.com/SirDank/KnightLauncher/releases/latest).
 3. Extract the downloaded `KnightLauncher-x.x.x.zip` ZIP file to your Spiral Knights directory (`x.x.x` will vary depending on the current version).
    - <ins>**Windows**</ins>:
      - **Steam**: Steam installations can be found by right-clicking the game on your Steam library and selecting "Manage" → "Browse Local Files," you can also look for it at `<Your Steam Folder>\steamapps\common\Spiral Knights`.
@@ -60,7 +60,7 @@ Still not working? Open a thread in [Discord's tech support channel](https://dis
 ## Updating
 
 The launcher is capable of auto-updating itself given the option is enabled in the launcher's settings, which will be by default. To manually update, follow these steps:
-1. Download the latest Knight Launcher release ZIP file [here](https://github.com/lucasluqui/KnightLauncher/releases/latest).
+1. Download the latest Knight Launcher release ZIP file [here](https://github.com/SirDank/KnightLauncher/releases/latest).
 2. Extract the downloaded ZIP file to your Spiral Knights folder, the same way you did when installing it for the first time. Guidance on finding your game folder can be found above at "Downloading & Installing."
 
 After following those steps, the launcher will be up to date.
@@ -79,7 +79,7 @@ To build Knight Launcher manually, follow these steps:
      - **macOS (Homebrew)**: `brew install git`.
      - **Linux (APT)**: `apt install git`.
 2. Clone the repository.
-   - `git clone https://github.com/lucasluqui/KnightLauncher.git`
+   - `git clone https://github.com/SirDank/KnightLauncher.git`
 3. Copy `projectx-pcode.jar` from your Spiral Knights `code` directory into the project's `lib` directory.
 4. Create a copy of `deploy.properties.template` in the repository's root directory then remove the `.template` extension. Fill any missing values.
 5. Validate all Maven dependencies.
@@ -102,12 +102,12 @@ https://discord.gg/RAf499a
 Unless hyperlinked names shown below represent Discord usernames. Hyperlinked names correspond to GitHub accounts.
 
 ### Contributors
-<a href="https://github.com/lucasluqui/KnightLauncher/graphs/contributors">
+<a href="https://github.com/SirDank/KnightLauncher/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=lucasluqui/KnightLauncher" />
 </a>
 
 ### Translators
-Translators are credited in their respective language file, [click here to browse](https://github.com/lucasluqui/KnightLauncher/tree/main/src/main/resources/rsrc/lang).
+Translators are credited in their respective language file, [click here to browse](https://github.com/SirDank/KnightLauncher/tree/main/src/main/resources/rsrc/lang).
 
 Thank you all for helping to make Knight Launcher usable for everyone worldwide!
 
