@@ -111,11 +111,7 @@ public class LauncherEventHandler
           ProcessUtil.run(getCodeModsStartCommand(altMode), true);
         } else {
           if (Settings.gamePlatform.startsWith("Steam")) {
-            try {
-              SteamUtil.startGameById(99900, SystemUtil.isMac());
-            } catch (Exception e) {
-              log.error(e);
-            }
+            SteamUtil.runApp(99900, SystemUtil.isMac());
           } else {
             if (SystemUtil.isWindows()) {
               ProcessUtil.run(LauncherGlobals.GETDOWN_ARGS_WIN, true);
@@ -266,6 +262,10 @@ public class LauncherEventHandler
           official.announceBannerLink = server.announceBannerLink;
           official.announceBannerStartsAt = server.announceBannerStartsAt;
           official.announceBannerEndsAt = server.announceBannerEndsAt;
+          official.maintenanceStartsAt = server.maintenanceStartsAt;
+          official.maintenanceEndsAt = server.maintenanceEndsAt;
+          official.noticeTitle = server.noticeTitle;
+          official.notice =  server.notice;
           continue;
         }
 
@@ -392,8 +392,6 @@ public class LauncherEventHandler
 
     if (selectedServer != null) {
       if (selectedServer.isOfficial()) {
-        gui.launchButton.setText(_localeManager.getValue("b.play"));
-        gui.launchButton.setToolTipText(_localeManager.getValue("b.play"));
         gui.launchButton.setEnabled(selectedServer.enabled == 1);
         gui.selectedServerLabel.setText("Official");
         gui.playerCountLabel.setVisible(true);
@@ -408,16 +406,6 @@ public class LauncherEventHandler
         //gui.auctionButton.setVisible(true);
       } else {
         gui.launchButton.setEnabled(selectedServer.enabled == 1);
-        if (!selectedServer.isInstalled()) {
-          gui.launchButton.setText(_localeManager.getValue("b.install"));
-          gui.launchButton.setToolTipText(_localeManager.getValue("b.install"));
-        } else if (selectedServer.isOutdated()) {
-          gui.launchButton.setText(_localeManager.getValue("b.update"));
-          gui.launchButton.setToolTipText(_localeManager.getValue("b.update"));
-        } else {
-          gui.launchButton.setText(_localeManager.getValue("b.play"));
-          gui.launchButton.setToolTipText(_localeManager.getValue("b.play"));
-        }
 
         gui.selectedServerLabel.setText("");
 
@@ -434,6 +422,29 @@ public class LauncherEventHandler
       }
 
       if (selectedServer.announceBanner != null) updateBanner();
+
+      for (ActionListener al : gui.serverNoticeButton.getActionListeners()) {
+        gui.serverNoticeButton.removeActionListener(al);
+      }
+
+      if (selectedServer.notice != null && !selectedServer.notice.equalsIgnoreCase("null")) {
+        String noticeTitle =
+            selectedServer.noticeTitle.equalsIgnoreCase("null") ?
+              _localeManager.getValue("b.server_notice") : selectedServer.noticeTitle;
+
+        gui.serverNoticeButton.setText(noticeTitle);
+        gui.serverNoticeButton.setToolTipText(noticeTitle);
+
+        gui.serverNoticeButton.addActionListener(
+          action -> Dialog.push(selectedServer.notice, noticeTitle, JOptionPane.WARNING_MESSAGE)
+        );
+
+        gui.serverNoticeButton.setVisible(true);
+      } else {
+        gui.serverNoticeButton.setVisible(false);
+      }
+
+      gui.resetLaunchButton();
 
       _launcherCtx.settingsGUI.eventHandler.selectedServerChanged();
       _launcherCtx.modListGUI.eventHandler.selectedServerChanged();
@@ -905,8 +916,7 @@ public class LauncherEventHandler
     // unblock launcher interactions
     _launcherCtx.unblock();
 
-    _launcherCtx.launcherGUI.launchButton.setIcon(null);
-    _launcherCtx.launcherGUI.launchButton.setText(_localeManager.getValue("b.play"));
+    _launcherCtx.launcherGUI.resetLaunchButton();
   }
 
   private String localizeTimeRemaining (String remainingString)

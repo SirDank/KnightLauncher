@@ -11,30 +11,46 @@ import static com.lucasluqui.util.Log.log;
 public class SteamUtil
 {
 
-  public static void startGameById (int id, boolean dialog)
-    throws Exception
+  public static void runApp (int id, boolean dialog)
   {
     // Special procedure for unix systems where we might not be able to get the darn desktop.
     if (SystemUtil.isUnix()) {
-      ProcessUtil.run(new String[]{"steam", "steam://rungameid/" + id}, true);
+      ProcessUtil.run(new String[] { "steam", "steam://rungameid/" + id }, true);
       return;
     }
 
     String steamProtocolString = dialog ? "steam://launch/" + id + "/dialog" : "steam://run/" + id;
-    Desktop desktop = Desktop.getDesktop();
-    URI steamProtocol = new URI(steamProtocolString);
-    desktop.browse(steamProtocol);
+
+    // Special procedure for Mac systems.
+    // There might be a way for Mac to use the same method as Windows, but I don't feel like
+    // going down that rabbit hole at the moment...
+    if (SystemUtil.isMac()) {
+      Desktop desktop = Desktop.getDesktop();
+      try {
+        URI steamProtocol = new URI(steamProtocolString);
+        desktop.browse(steamProtocol);
+      } catch (Exception e) {
+        log.error(e);
+      }
+    }
+
+    ProcessUtil.run(new String[] { "cmd.exe", "/C", "start", steamProtocolString }, true);
+  }
+
+  public static String getSteamPath ()
+  {
+    try {
+      return WinRegistry.readString(WinRegistry.HKEY_CURRENT_USER, "Software\\Valve\\Steam", "SteamPath", 0);
+    } catch (Exception e) {
+      log.error(e);
+    }
+    return null;
   }
 
   public static String getGamePathWindows ()
   {
-    try {
-      return WinRegistry.readString(WinRegistry.HKEY_CURRENT_USER, "Software\\Valve\\Steam", "SteamPath", 0)
-        + "/steamapps/common/Spiral Knights";
-    } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
-      log.error(e);
-    }
-    return null;
+    String steamPath = getSteamPath();
+    return steamPath != null ? steamPath + "/steamapps/common/Spiral Knights" : null;
   }
 
   public static int getCurrentPlayers (String id)
