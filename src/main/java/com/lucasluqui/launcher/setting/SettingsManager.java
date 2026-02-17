@@ -2,6 +2,7 @@ package com.lucasluqui.launcher.setting;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.lucasluqui.launcher.DeployConfig;
 import com.lucasluqui.launcher.LauncherContext;
 import com.lucasluqui.launcher.LauncherGlobals;
 import com.lucasluqui.launcher.LocaleManager;
@@ -245,6 +246,9 @@ public class SettingsManager
         if (Settings.gameGarbageCollector.equals("ParallelOld")) {
           writer.println("-XX:+UseParallelGC");
           writer.println("-XX:+Use" + Settings.gameGarbageCollector + "GC");
+        } else if (Settings.gameGarbageCollector.equals("ZGC") && DeployConfig.isDev()) {
+          writer.println("-XX:+Use" + Settings.gameGarbageCollector);
+          writer.println("-XX:+ZGenerational");
         } else {
           writer.println("-XX:+Use" + Settings.gameGarbageCollector + "GC");
         }
@@ -253,6 +257,9 @@ public class SettingsManager
       if (Settings.gameUndecoratedWindow) writer.println("-Dorg.lwjgl.opengl.Window.undecorated=true");
 
       if (Settings.gameGarbageCollector.equals("G1")) {
+        writer.println("-Xms" + Settings.gameMemory + "M");
+        writer.println("-Xmx" + Settings.gameMemory + "M");
+      } else if (Settings.gameGarbageCollector.equals("ZGC") && DeployConfig.isDev()) {
         writer.println("-Xms" + Settings.gameMemory + "M");
         writer.println("-Xmx" + Settings.gameMemory + "M");
       } else {

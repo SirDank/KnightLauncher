@@ -351,6 +351,7 @@ public class SettingsGUI extends BaseGUI
     choiceGC.setFocusable(false);
     choiceGC.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
     gamePanel.add(choiceGC);
+    choiceGC.addItem("ZGC");
     choiceGC.addItem("ParallelOld");
     choiceGC.addItem("Serial");
     choiceGC.addItem("G1");
@@ -436,7 +437,7 @@ public class SettingsGUI extends BaseGUI
     jvmPatchButton.addActionListener(eventHandler::jvmPatchEvent);
 
     if (((SystemUtil.isWindows() && SystemUtil.is64Bit()) || (SystemUtil.isUnix() && Settings.gamePlatform.equalsIgnoreCase("Steam")))) {
-      jvmPatchButton.setEnabled(true);
+      jvmPatchButton.setEnabled(DeployConfig.isDev());
       jvmPatchButton.setToolTipText(null);
     }
 
