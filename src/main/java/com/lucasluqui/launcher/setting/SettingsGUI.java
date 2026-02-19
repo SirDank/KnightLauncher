@@ -351,8 +351,8 @@ public class SettingsGUI extends BaseGUI
     choiceGC.setFocusable(false);
     choiceGC.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
     gamePanel.add(choiceGC);
+    choiceGC.addItem("Parallel");
     choiceGC.addItem("ZGC");
-    choiceGC.addItem("ParallelOld");
     choiceGC.addItem("Serial");
     choiceGC.addItem("G1");
     choiceGC.setSelectedItem(Settings.gameGarbageCollector);
@@ -526,6 +526,7 @@ public class SettingsGUI extends BaseGUI
           break;
         case 1:
           betaCodeResultLabel.setText(_localeManager.getValue("m.beta_code_success"));
+          updateActiveBetaCodes();
           break;
         case 2:
           betaCodeResultLabel.setText(_localeManager.getValue("m.beta_code_duplicate"));
@@ -657,6 +658,9 @@ public class SettingsGUI extends BaseGUI
     }
 
     if (!entitledServers.isEmpty()) {
+      activeCodesPane.removeAll();
+      activeCodesPane.updateUI();
+
       int count = 0;
       for (Server server : entitledServers) {
         JPanel activeCodePane = new JPanel();
@@ -762,6 +766,9 @@ public class SettingsGUI extends BaseGUI
     advancedPanel.add(scrollBar);
 
     argumentsPane.setCaretPosition(0);
+
+    // TODO: Temporary, re-enable once it's fixed.
+    argumentsPane.setEnabled(false);
 
     eventHandler.checkExistingArguments();
 

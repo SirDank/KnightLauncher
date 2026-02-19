@@ -26,7 +26,7 @@ public class SettingsManager
   @Inject protected LocaleManager _localeManager;
   @Inject protected FlamingoManager _flamingoManager;
 
-  private final String PROP_VER = "28";
+  private final String PROP_VER = "29";
   private final String PROP_PATH = LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.properties";
 
   private final Properties prop = new Properties();
@@ -106,14 +106,14 @@ public class SettingsManager
     Settings.gamePlatform = getValue("game.platform");
     Settings.gameDisableExplicitGC = Boolean.parseBoolean(getValue("game.disableExplicitGC"));
     Settings.gameUseCustomGC = Boolean.parseBoolean(getValue("game.useCustomGC"));
-    Settings.gameGarbageCollector = getValue("game.garbageCollector");
+    Settings.gameGarbageCollector = getValue("game.garbageCollector.v2");
     Settings.gameMemory = Integer.parseInt(getValue("game.memory"));
     Settings.gameEndpoint = getValue("game.endpoint");
     Settings.gamePort = Integer.parseInt(getValue("game.port"));
     Settings.gamePublicKey = getValue("game.publicKey");
     Settings.gameGetdownURL = getValue("game.getdownURL");
     Settings.gameGetdownFullURL = getValue("game.getdownFullURL");
-    Settings.gameAdditionalArgs = getValue("game.additionalArgs", "");
+    Settings.gameAdditionalArgs = getValue("game.additionalArgs.v2", "");
 
     log.info("Loaded required settings from properties file");
   }
@@ -228,11 +228,12 @@ public class SettingsManager
       _launcherCtx._progressBar.setBarValue(0);
       _launcherCtx._progressBar.setState(_localeManager.getValue("m.apply"));
 
-      /**
-       * Back up the current extra.txt if there's no back up already.
-       * This is useful if a user installs the launcher and had already
-       * made its own extra.txt, this way it won't get deleted forever, just renamed.
-       */
+      // Run a platform check by triggering a change event just in case the value stored is incorrect.
+      _launcherCtx.settingsGUI.eventHandler.platformChangeEvent(null);
+
+      // Back up the current extra.txt if there's no back up already.
+      // This is useful if a user installs the launcher and had already
+      // made its own extra.txt, this way it won't get deleted forever, just renamed.
       if (!FileUtil.fileExists("old-extra.txt")) {
         FileUtil.rename(new File("extra.txt"), new File("old-extra.txt"));
       }
@@ -243,12 +244,11 @@ public class SettingsManager
       if (Settings.gameDisableExplicitGC) writer.println("-XX:+DisableExplicitGC");
 
       if (Settings.gameUseCustomGC) {
-        if (Settings.gameGarbageCollector.equals("ParallelOld")) {
+        if (Settings.gameGarbageCollector.equals("Parallel")) {
           writer.println("-XX:+UseParallelGC");
-          writer.println("-XX:+Use" + Settings.gameGarbageCollector + "GC");
-        } else if (Settings.gameGarbageCollector.equals("ZGC") && DeployConfig.isDev()) {
+        } else if (Settings.gameGarbageCollector.equals("ZGC")) {
           writer.println("-XX:+Use" + Settings.gameGarbageCollector);
-          writer.println("-XX:+ZGenerational");
+          // TODO: Maybe add some extra settings for ZGC to use?
         } else {
           writer.println("-XX:+Use" + Settings.gameGarbageCollector + "GC");
         }
@@ -256,18 +256,16 @@ public class SettingsManager
 
       if (Settings.gameUndecoratedWindow) writer.println("-Dorg.lwjgl.opengl.Window.undecorated=true");
 
-      if (Settings.gameGarbageCollector.equals("G1")) {
-        writer.println("-Xms" + Settings.gameMemory + "M");
-        writer.println("-Xmx" + Settings.gameMemory + "M");
-      } else if (Settings.gameGarbageCollector.equals("ZGC") && DeployConfig.isDev()) {
+      if (Settings.gameGarbageCollector.equals("G1") || Settings.gameGarbageCollector.equals("ZGC")) {
         writer.println("-Xms" + Settings.gameMemory + "M");
         writer.println("-Xmx" + Settings.gameMemory + "M");
       } else {
-        writer.println("-Xms512M");
+        writer.println("-Xms" + Settings.gameMemory / 2 + "M");
         writer.println("-Xmx" + Settings.gameMemory + "M");
       }
 
-      writer.println(Settings.gameAdditionalArgs);
+      // TODO: Add guard rails to avoid non java args from being parsed here.
+      //writer.println(Settings.gameAdditionalArgs);
       writer.close();
 
       if (_flamingoManager.getSelectedServer().isOfficial()) applyConnectionSettings();
