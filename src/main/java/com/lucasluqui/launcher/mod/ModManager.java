@@ -133,6 +133,9 @@ public class ModManager
       // Finally, let's see which have been set as disabled.
       parseDisabledMods();
 
+      // Check if there's any incompatible mods.
+      checkModCompatibility();
+
       // Mounting after a game update sometimes causes getdown to re-validate files again, making that
       // first mount essentially useless, so with this setting we make sure mods are force mounted at least 2 times
       // with the current known version.
@@ -146,8 +149,13 @@ public class ModManager
       }
 
       // Check if there's a new or removed mod since the last execution, rebuild will be needed in that case.
-      if (Integer.parseInt(_settingsManager.getValue("modloader.appliedModsHash", selectedServer)) != getEnabledModsHash()) {
-        log.info("Hashcode doesn't match, preparing for rebuild and remount...");
+      int previousModHash = Integer.parseInt(_settingsManager.getValue("modloader.appliedModsHash", selectedServer));
+      int currentModHash = getEnabledModsHash();
+      if (previousModHash != currentModHash) {
+        log.info("Hashcode doesn't match, preparing for rebuild and remount...",
+          "previous", previousModHash,
+          "current", currentModHash
+        );
         rebuildRequired = true;
         mountRequired = true;
       }
@@ -158,8 +166,6 @@ public class ModManager
         rebuildRequired = true;
         mountRequired = true;
       }
-
-      checkModCompatibility();
 
       // Check if there's directories in the mod folder and push a warning to the user.
       for (File file : FileUtil.filesAndDirectoriesInDirectory(modFolderPath)) {
@@ -191,7 +197,6 @@ public class ModManager
     _launcherCtx._progressBar.setState(_localeManager.getValue("m.mount"));
     _discordPresenceClient.setDetails(_localeManager.getValue("m.mount"));
     LinkedList<Mod> localList = getModList();
-    Set<Long> hashSet = new HashSet<>();
 
     for (int i = 0; i < getModCount(); i++) {
       Mod mod = localList.get(i);
@@ -207,13 +212,11 @@ public class ModManager
         } else {
           mod.mount();
         }
-        long lastModified = new File(rootDir + "/mods/" + mod.getFileName()).lastModified();
-        hashSet.add(lastModified);
         _launcherCtx._progressBar.setBarValue(i + 1);
       }
     }
 
-    _settingsManager.setValue("modloader.appliedModsHash", Integer.toString(hashSet.hashCode()), selectedServer);
+    _settingsManager.setValue("modloader.appliedModsHash", String.valueOf(getEnabledModsHash()), selectedServer);
 
     // Mount all the locale changes.
     if (!globalLocaleChanges.isEmpty()) {
@@ -256,15 +259,15 @@ public class ModManager
         } catch (Exception ignored) {}
 
         // Turn all the locale changes back into a jar file.
-        String[] outputCapture;
-        if (SystemUtil.isWindows()) {
-          outputCapture = ProcessUtil.runAndCapture(new String[] { "cmd.exe", "/C", JavaUtil.getGameJVMDirPath() + "/bin/jar.exe", "cvf", "code/projectx-config-new.jar", "-C", "code/locale-changes/", "." });
-        } else if (SystemUtil.isMac()) {
-          outputCapture = ProcessUtil.runAndCapture(new String[] { "/bin/bash", "-c", "jar cvf code/projectx-config-new.jar -C code/locale-changes/ ." });
-        } else {
-          outputCapture = ProcessUtil.runAndCapture(new String[] { "/bin/bash", "-c", "\"" + JavaUtil.getGameJVMDirPath() + "/bin/jar" + "\"", "cvf", "code/projectx-config-new.jar", "-C", "code/locale-changes/", "." });
+        try {
+          ZipUtil.zipFolderContents(
+            new File(rootDir + "/code/locale-changes/"),
+            new File(rootDir + "/code/projectx-config-new.jar"),
+            "projectx-config-new.jar"
+          );
+        } catch (Exception e) {
+          log.error(e);
         }
-        log.info("Locale changes capture, stdout=", outputCapture[0], "stderr=", outputCapture[1]);
 
         // Delete the temporary directory used to store locale changes.
         FileUtils.deleteDirectory(new File(rootDir + "/code/locale-changes"));
@@ -303,15 +306,15 @@ public class ModManager
     } catch (Exception ignored) {}
 
     // And now after merging their contents, we turn it back into config.jar.
-    String[] outputCapture;
-    if (SystemUtil.isWindows()) {
-      outputCapture = ProcessUtil.runAndCapture(new String[] { "cmd.exe", "/C", JavaUtil.getGameJVMDirPath() + "/bin/jar.exe", "cvf", "code/config-new.jar", "-C", "code/class-changes/", "." });
-    } else if (SystemUtil.isMac()) {
-      outputCapture = ProcessUtil.runAndCapture(new String[] { "/bin/bash", "-c", "jar cvf code/config-new.jar -C code/class-changes/ ." });
-    } else {
-      outputCapture = ProcessUtil.runAndCapture(new String[] { "/bin/bash", "-c", "\"" + JavaUtil.getGameJVMDirPath() + "/bin/jar" + "\"", "cvf", "code/config-new.jar", "-C", "code/class-changes/", "." });
+    try {
+      ZipUtil.zipFolderContents(
+        new File(rootDir + "/code/class-changes/"),
+        new File(rootDir + "/code/config-new.jar"),
+        "config-new.jar"
+      );
+    } catch (Exception e) {
+      log.error(e);
     }
-    log.info("Class changes capture, stdout=", outputCapture[0], "stderr=", outputCapture[1]);
 
     try {
       // Delete the temporary directory used to store class changes.
@@ -452,10 +455,12 @@ public class ModManager
   private int getEnabledModsHash ()
   {
     Set<Long> hashSet = new HashSet<>();
+    String rootDir = _flamingoManager.getSelectedServer().getRootDirectory();
     for (Mod mod : modList) {
-      long lastModified = new File(_flamingoManager.getSelectedServer().getRootDirectory() + "/mods/" + mod.getFileName()).lastModified();
+      long lastModified = new File(rootDir + "/mods/" + mod.getFileName()).lastModified();
       if (mod.isEnabled()) hashSet.add(lastModified);
     }
+
     return hashSet.hashCode();
   }
 
