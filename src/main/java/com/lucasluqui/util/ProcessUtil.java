@@ -5,6 +5,7 @@ import org.apache.commons.io.IOUtils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Map;
 
 import static com.lucasluqui.util.Log.log;
 
@@ -15,7 +16,14 @@ public class ProcessUtil
   {
     Process process = null;
     try {
-      process = Runtime.getRuntime().exec(command);
+      Map<String, String> env = System.getenv();
+
+      String[] cleanEnv = env.entrySet().stream()
+        .filter(e -> !e.getKey().equals("_JAVA_OPTIONS"))
+        .map(e -> e.getKey() + "=" + e.getValue())
+        .toArray(String[]::new);
+
+      process = Runtime.getRuntime().exec(command, cleanEnv);
     } catch (IOException e) {
       log.error(e);
     } finally {
@@ -28,6 +36,10 @@ public class ProcessUtil
   {
     ProcessBuilder pb = new ProcessBuilder(command);
     pb.directory(new File(workDir));
+
+    // Get rid of _JAVA_OPTIONS, usually just contains garbage.
+    pb.environment().remove("_JAVA_OPTIONS");
+
     Process process = null;
     try {
       process = pb.start();
@@ -43,7 +55,13 @@ public class ProcessUtil
   {
     Process process = null;
     try {
-      process = new ProcessBuilder(command).start();
+      ProcessBuilder processBuilder = new ProcessBuilder(command);
+
+      // Get rid of _JAVA_OPTIONS, usually just contains garbage.
+      processBuilder.environment().remove("_JAVA_OPTIONS");
+
+      // Start the process.
+      process = processBuilder.start();
 
       // Capture both streams and send them back. Ideally we'd only pass stdout but Java likes
       // sending important stuff through stderr like -version.
