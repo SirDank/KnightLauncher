@@ -41,18 +41,21 @@ Open source game launcher for Spiral Knights. Supports user-friendly Java config
      - **Steam**: Steam installations can be found by right-clicking the game on your Steam library and selecting "Manage" → "Browse Local Files," you can also look for it at `<Your Steam Folder>\steamapps\common\Spiral Knights`.
      - **Standalone**: Standalone installations can be found by first right-clicking the Spiral Knights shortcut on your desktop, clicking "Open File Location," and once you're there you must enter the `app` folder. You can also look for it at `<Your User Folder>\AppData\Local\Spiral Knights\app`
    - <ins>**macOS**</ins>:
-     - **Steam**: Steam installations can be found by right-clicking the game on your Steam library, selecting "Manage" → "Browse Local Files," then right click the "Spiral Knights" application file and select "Show Package Contents". Once this is done, browse to `Contents/Resources/Java`. This is where you must extract the zip file you downloaded earlier.
-     - **Standalone**: Standalone installations can be found by searching "Spiral Knights" in Applications, then right click on the result and select "Show in Finder", finally right click the "Spiral Knights" Application file and select "Show Package Contents", and browse to `Contents/Resources/Java`. This is where you must extract the zip file you downloaded earlier.
+     - **Steam**: Steam installations can be found by right-clicking the game on your Steam library and then selecting "Manage" → "Browse Local Files". This is where you must extract the zip file you downloaded earlier.
+     - **Standalone**: Standalone installations can be found by searching "Spiral Knights" in Applications, then right click on the result and select "Show in Finder", finally right click the "Spiral Knights" Application file and select "Show Package Contents". Once you're there, enter the `Contents` folder and then the `app` folder. This is where you must extract the zip file you downloaded earlier.
    - <ins>**Linux**</ins>:
      - **Steam**: Steam installations can be found by right-clicking the game on your Steam library and selecting "Manage" → "Browse Local Files".
      - **Standalone**: There's no standalone download for Linux, you must download the game through Steam. Once that's done, follow the instructions above to install the launcher via Steam on Linux, and you'll be able to set your platform as standalone in the launcher's settings.
 
-> [!NOTE]
-> Bear in mind that those are the *usual* installation locations, your mileage may vary.
-
 5. Double-click the `KnightLauncher.jar` JAR file. The launcher should now boot up.
-   - **For macOS users**: If a window pops up displaying "macOS cannot verify that this app is free from malware" click on "Done", then go to your System Settings → Privacy & Security, scroll to the very bottom of this panel, and where it says "KnightLauncher.jar was blocked to protect your Mac." click on "Open Anyway", then "Open Anyway" again on the pop up message that appears afterwards, and finally verify using Touch ID or your user's password. This should prevent the first pop up from appearing again.
-7. If nothing happens, double-click the `KnightLauncher_windows.bat` file or `KnightLauncher_mac_linux.sh` file depending on your operating system.
+
+6. If nothing happens, double-click the `KnightLauncher_windows.bat` file or `KnightLauncher_mac_linux.sh` file depending on your operating system.
+
+> [!WARNING]
+> **For macOS users**: If a window pops up displaying "macOS cannot verify that this app is free from malware" click on "Done", then go to your System Settings → Privacy & Security, scroll to the very bottom of this panel, and where it says "KnightLauncher.jar was blocked to protect your Mac." click on "Open Anyway", then "Open Anyway" again on the pop up message that appears afterwards, and finally verify using Touch ID or your user's password. This should prevent the first pop up from appearing again.
+
+> [!NOTE]
+> Bear in mind that the installation locations listed above are the defaults for their respective operating systems, however your mileage may vary if you've installed the game in a custom folder.
 
 Still not working? Open a thread in [Discord's tech support channel](https://discord.gg/m6TT9PM9B7) so the community can help you.
 
