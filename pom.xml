@@ -6,16 +6,15 @@
   <groupId>com.lucasluqui</groupId>
   <artifactId>KnightLauncher</artifactId>
   <packaging>jar</packaging>
-  <version>2.6.13-SNAPSHOT</version>
+  <version>2.7.3-SNAPSHOT</version>
 
   <name>Knight Launcher</name>
   <description>Open source game launcher for Spiral Knights.</description>
 
-  <licenses>
-    <license>
-      <url>https://www.gnu.org/licenses/gpl-3.0.html</url>
-    </license>
-  </licenses>
+  <url>https://github.com/lucasluqui/KnightLauncher</url>
+  <issueManagement>
+    <url>https://github.com/lucasluqui/KnightLauncher/issues</url>
+  </issueManagement>
 
   <developers>
     <developer>
@@ -24,6 +23,12 @@
       <email>contact@lucasluqui.com</email>
     </developer>
   </developers>
+
+  <licenses>
+    <license>
+      <url>https://www.gnu.org/licenses/gpl-3.0.html</url>
+    </license>
+  </licenses>
 
   <properties>
     <env>dev</env>
@@ -35,7 +40,7 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>33.4.8-jre</version>
+      <version>33.5.0-jre</version>
     </dependency>
     <dependency>
       <groupId>com.google.inject</groupId>
@@ -45,7 +50,7 @@
     <dependency>
       <groupId>com.formdev</groupId>
       <artifactId>flatlaf</artifactId>
-      <version>3.6</version>
+      <version>3.7.1</version>
     </dependency>
     <dependency>
       <groupId>com.github.vatbub</groupId>
@@ -55,12 +60,12 @@
     <dependency>
       <groupId>net.lingala.zip4j</groupId>
       <artifactId>zip4j</artifactId>
-      <version>2.11.5</version>
+      <version>2.11.6</version>
     </dependency>
     <dependency>
       <groupId>org.json</groupId>
       <artifactId>json</artifactId>
-      <version>20250517</version>
+      <version>20251224</version>
     </dependency>
     <dependency>
       <groupId>com.github.jiconfont</groupId>
@@ -85,12 +90,12 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>2.19.0</version>
+      <version>2.21.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-text</artifactId>
-      <version>1.14.0</version>
+      <version>1.15.0</version>
     </dependency>
     <dependency>
       <groupId>com.jhlabs</groupId>
@@ -100,12 +105,12 @@
     <dependency>
       <groupId>com.github.oshi</groupId>
       <artifactId>oshi-core</artifactId>
-      <version>6.8.2</version>
+      <version>6.11.1</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-nop</artifactId>
-      <version>2.0.17</version>
+      <version>2.1.0-alpha1</version>
     </dependency>
     <dependency>
       <groupId>org.madlonkay</groupId>
@@ -115,7 +120,7 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
-      <version>5.13.1</version>
+      <version>5.14.3</version>
       <scope>test</scope>
     </dependency>
 
@@ -151,6 +156,7 @@
   <build>
     <finalName>${project.artifactId}</finalName>
     <sourceDirectory>src/main/java</sourceDirectory>
+
     <resources>
       <resource>
         <directory>./</directory>
@@ -167,6 +173,7 @@
         <filtering>true</filtering>
       </resource>
     </resources>
+
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -174,7 +181,7 @@
         <version>3.1.4</version>
         <executions>
           <execution>
-            <id>install-1</id>
+            <id>local-install-discord-rpc</id>
             <phase>validate</phase>
             <goals>
               <goal>install-file</goal>
@@ -187,7 +194,7 @@
             </configuration>
           </execution>
           <execution>
-            <id>install-2</id>
+            <id>local-install-image4j</id>
             <phase>validate</phase>
             <goals>
               <goal>install-file</goal>
@@ -204,14 +211,14 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
-        <version>3.3.1</version>
+        <version>3.5.0</version>
         <configuration>
           <encoding>${project.build.sourceEncoding}</encoding>
         </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>3.7.1</version>
+        <version>3.8.0</version>
         <executions>
           <execution>
             <phase>package</phase>
@@ -234,7 +241,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.14.0</version>
+        <version>3.15.0</version>
         <configuration>
           <encoding>UTF-8</encoding>
           <source>1.8</source>

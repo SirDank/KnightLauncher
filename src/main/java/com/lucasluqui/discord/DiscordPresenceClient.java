@@ -2,7 +2,7 @@ package com.lucasluqui.discord;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.lucasluqui.launcher.BuildConfig;
+import com.lucasluqui.util.BuildConfig;
 import com.lucasluqui.launcher.LocaleManager;
 import net.arikia.dev.drpc.DiscordEventHandlers;
 import net.arikia.dev.drpc.DiscordRPC;
@@ -55,7 +55,7 @@ public class DiscordPresenceClient
     this.clientId = clientId;
     DiscordRPC.discordInitialize(this.clientId, this.getEventHandlers(), true);
     setDetails(_localeManager.getValue("presence.starting"));
-    log.info("Discord presence client is now running.");
+    log.info("Discord presence client is now running");
   }
 
   public void setDetails (String details)

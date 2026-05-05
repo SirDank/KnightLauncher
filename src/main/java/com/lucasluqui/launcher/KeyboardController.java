@@ -2,6 +2,7 @@ package com.lucasluqui.launcher;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.lucasluqui.launcher.ui.BaseUI;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -9,36 +10,42 @@ import java.awt.event.KeyEvent;
 @Singleton
 public class KeyboardController
 {
-  @Inject protected LauncherContext _launcherCtx;
-
-  private Boolean shiftPressed = false;
-  private Boolean altPressed = false;
-
   public KeyboardController ()
-  {
-
-  }
+  {}
 
   public void init ()
   {
     KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(ke -> {
-      switch (ke.getID()) {
-        case KeyEvent.KEY_PRESSED:
-          if (ke.getKeyCode() == KeyEvent.VK_SHIFT) {
+      switch (ke.getKeyCode()) {
+
+        // SHIFT key event.
+        case KeyEvent.VK_SHIFT:
+          if (ke.getID() == KeyEvent.KEY_PRESSED) {
             shiftPressed();
             specialKeyPressed();
-          } else if (ke.getKeyCode() == KeyEvent.VK_ALT) {
+          }
+          if (ke.getID() == KeyEvent.KEY_RELEASED) {
+            shiftReleased();
+            specialKeyReleased();
+          }
+          break;
+
+        // ALT key event.
+        case KeyEvent.VK_ALT:
+          if (ke.getID() == KeyEvent.KEY_PRESSED) {
             altPressed();
             specialKeyPressed();
           }
-          break;
-        case KeyEvent.KEY_RELEASED:
-          if (ke.getKeyCode() == KeyEvent.VK_SHIFT) {
-            shiftReleased();
-            specialKeyReleased();
-          } else if (ke.getKeyCode() == KeyEvent.VK_ALT) {
+          if (ke.getID() == KeyEvent.KEY_RELEASED) {
             altReleased();
             specialKeyReleased();
+          }
+          break;
+
+        // ESC key event.
+        case KeyEvent.VK_ESCAPE:
+          if (ke.getID() == KeyEvent.KEY_RELEASED) {
+            _ctx.getApp().returnToHome();
           }
           break;
       }
@@ -48,12 +55,16 @@ public class KeyboardController
 
   private void specialKeyPressed ()
   {
-    _launcherCtx.launcherGUI.specialKeyPressed();
+    for (BaseUI ui : _ctx.getApp().getUIMap().values()) {
+      ui.specialKeyPressed();
+    }
   }
 
   private void specialKeyReleased ()
   {
-    _launcherCtx.launcherGUI.specialKeyReleased();
+    for (BaseUI ui : _ctx.getApp().getUIMap().values()) {
+      ui.specialKeyReleased();
+    }
   }
 
   private void shiftPressed ()
@@ -93,4 +104,8 @@ public class KeyboardController
     specialKeyReleased();
   }
 
+  @Inject protected LauncherContext _ctx;
+
+  private Boolean shiftPressed = false;
+  private Boolean altPressed = false;
 }

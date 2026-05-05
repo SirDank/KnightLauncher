@@ -9,7 +9,7 @@ public class LauncherGlobals
   public static final String GITHUB_API = "https://api.github.com/";
   public static final String GITHUB_AUTHOR = "SirDank";
   public static final String GITHUB_REPO = "KnightLauncher";
-  public static final String GITHUB_BRANCH = "main";
+  public static final String GITHUB_API_LATEST_RELEASE = "https://api.github.com/repos/" + GITHUB_AUTHOR + "/" + GITHUB_REPO + "/releases/latest";
 
   public static final String CDN_ENDPOINT = "cdn.knightlauncher.com";
   public static final String CDN_VERSION = "2";

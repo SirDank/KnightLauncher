@@ -2,11 +2,14 @@ package com.lucasluqui.launcher.flamingo;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.lucasluqui.launcher.BuildConfig;
-import com.lucasluqui.launcher.DeployConfig;
+import com.lucasluqui.launcher.*;
 import com.lucasluqui.launcher.flamingo.data.Server;
 import com.lucasluqui.launcher.flamingo.data.Status;
+import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.SettingsManager;
+import com.lucasluqui.launcher.mod.ui.ModListUI;
+import com.lucasluqui.launcher.setting.ui.SettingsUI;
+import com.lucasluqui.launcher.ui.LauncherUI;
 import com.lucasluqui.util.*;
 import org.json.JSONObject;
 
@@ -25,16 +28,6 @@ import static com.lucasluqui.launcher.flamingo.Log.log;
 @Singleton
 public class FlamingoManager
 {
-  @Inject protected SettingsManager _settingsManager;
-
-  private final String ADDRESS = DeployConfig.getFlamingoAddress();
-  private final int PORT = DeployConfig.getFlamingoPort();
-
-  private List<Server> serverList = new ArrayList<>();
-  private Server selectedServer = null;
-  private String machineId = null;
-  private boolean online = false;
-
   public FlamingoManager ()
   {
     // empty.
@@ -43,12 +36,31 @@ public class FlamingoManager
   public void init ()
   {
     String localId = getLocalId();
-    this.machineId = SystemUtil.getHashedMachineId(localId);
+    _machineId = SystemUtil.getHashedMachineId(localId);
 
     // Make sure we at least have the official server on init.
     Server official = new Server("Official");
-    serverList.add(official);
-    this.selectedServer = official;
+    _serverList.add(official);
+    _selectedServer = official;
+  }
+
+  public void load ()
+  {
+    getStatus();
+
+    if (_status == null) {
+      log.info("Flamingo status is null, we are offline!");
+      setAsOffline();
+
+      // Still at least TRY to get GitHub data, perhaps the issue is on flamingo's side?
+      // Helpful too in case we need to update the launcher with flamingo off.
+      _ctx.getApp().fetchGithubData();
+
+      return;
+    }
+
+    updateServerList();
+    _ctx.getApp().fetchGithubData();
   }
 
   public List<Server> fetchServerList ()
@@ -56,7 +68,7 @@ public class FlamingoManager
     List<Server> servers = new ArrayList<>();
 
     try {
-      JSONObject response = sendRequest("GET", "/server-list/", new String[]{"machineId=" + this.machineId});
+      JSONObject response = sendRequest("GET", "/server-list/", new String[]{"machineId=" + this._machineId});
       log.info("Got server list from flamingo");
 
       // we got an empty server list, so empty we return it.
@@ -103,7 +115,7 @@ public class FlamingoManager
   public String activateBetaCode (String code)
   {
     try {
-      JSONObject response = sendRequest("POST", "/beta-code/activate/" + code, new String[]{"machineId=" + this.machineId});
+      JSONObject response = sendRequest("POST", "/beta-code/activate/" + code, new String[]{"machineId=" + this._machineId});
       log.info("Got response for beta code activation: " + response);
 
       return response.getString("result");
@@ -115,6 +127,10 @@ public class FlamingoManager
 
   public Status getStatus ()
   {
+    if (this._status != null) {
+      return this._status;
+    }
+
     try {
       JSONObject response = sendRequest("GET", "/status/", new String[]{});
       log.info("Got status from flamingo: " + response);
@@ -123,24 +139,19 @@ public class FlamingoManager
       status.version = response.getString("version");
       status.uptime = response.getLong("uptime");
 
+      this._status = status;
+
       return status;
     } catch (Exception e) {
       log.error(e);
-      return new Status();
+      return null;
     }
   }
 
-  private JSONObject sendRequest (String method, String endpoint, String[] request)
+  private void setAsOffline ()
   {
-    try {
-      request = Arrays.copyOf(request, request.length + 1);
-      request[request.length - 1] = "version=" + TextUtil.extractNumericFromString(BuildConfig.getVersion());
-      return RequestUtil.makeRequest(method, "http://" + ADDRESS + ":" + PORT + endpoint, request);
-    } catch (Exception e) {
-      log.error("Request failed");
-      log.error(e);
-    }
-    return null;
+    _ctx.getApp().getUI(LauncherUI.class)
+      .showWarning(_localeManager.getValue("error.flamingo_offline"));
   }
 
   public Server findServerByName (String serverName)
@@ -160,7 +171,7 @@ public class FlamingoManager
   public String getLocalGameVersion ()
   {
     try {
-      String buildString = ZipUtil.readFileInsideZip(this.selectedServer.getRootDirectory() + File.separator + "code/config.jar", "build.properties");
+      String buildString = ZipUtil.readFileInsideZip(this._selectedServer.getRootDirectory() + File.separator + "code/config.jar", "build.properties");
       Properties properties = new Properties();
       properties.load(new ByteArrayInputStream(buildString.getBytes(StandardCharsets.UTF_8)));
       String version = properties.getProperty("version");
@@ -168,7 +179,7 @@ public class FlamingoManager
       return version;
     } catch (IOException e) {
       try {
-        String version = FileUtil.readFile(this.selectedServer.getRootDirectory() + File.separator + "version.txt").trim();
+        String version = FileUtil.readFile(this._selectedServer.getRootDirectory() + File.separator + "version.txt").trim();
         return version;
       } catch (IOException ex) {
         log.error(ex);
@@ -190,34 +201,159 @@ public class FlamingoManager
     return _settingsManager.getValue("launcher.key");
   }
 
+  public void updateServerList ()
+  {
+    List<Server> serverList = getServerList();
+    serverList.clear();
+
+    Server official = new Server("Official");
+    serverList.add(official);
+
+    List<Server> newServerList = null;
+    if (isOnline()) {
+      newServerList = fetchServerList();
+    }
+
+    if (newServerList != null) {
+      for (Server server : newServerList) {
+        if (server.name.equalsIgnoreCase("Official")) {
+          official.playerCountUrl = "~" + _ctx.getApp().getOfficialApproxPlayerCount() + " ";
+          official.announceBanner = server.announceBanner;
+          official.announceContent = server.announceContent;
+          official.announceBannerLink = server.announceBannerLink;
+          official.announceBannerStartsAt = server.announceBannerStartsAt;
+          official.announceBannerEndsAt = server.announceBannerEndsAt;
+          official.maintenanceStartsAt = server.maintenanceStartsAt;
+          official.maintenanceEndsAt = server.maintenanceEndsAt;
+          official.noticeTitle = server.noticeTitle;
+          official.notice = server.notice;
+          continue;
+        }
+
+        // Prevent from adding duplicate servers
+        if (findServerByName(server.name) != null) {
+          log.info("Tried to add duplicate server", "server", server.name);
+          continue;
+        }
+
+        if (server.beta == 1) server.name += " (Beta)";
+
+        serverList.add(server);
+
+        // make sure we have a proper folder structure for this server.
+        String serverName = server.getSanitizedName();
+        FileUtil.createDir(getThirdPartyBaseDir() + serverName);
+        FileUtil.createDir(getThirdPartyBaseDir() + serverName + "/mods");
+
+        // make sure there's a base zip file we can use to clean files with.
+        String rootDir = server.getRootDirectory();
+        if (FileUtil.fileExists(rootDir + "/rsrc")
+          && !FileUtil.fileExists(rootDir + "/rsrc/base.zip")) {
+          try {
+            ZipUtil.zipFolderContents(new File(rootDir + "/rsrc"), new File(rootDir + "/rsrc/base.zip"), "base.zip");
+          } catch (Exception e) {
+            log.error(e);
+          }
+        }
+
+        // check server specific settings keys.
+        _ctx.getApp().getUI(SettingsUI.class).eventHandler.checkServerSettingsKeys(serverName);
+        _ctx.getApp().getUI(ModListUI.class).eventHandler.checkServerSettingsKeys(serverName);
+      }
+      setServerList(serverList);
+
+      try {
+        // Shouldn't sanitized name from Official just return 'official' instead of null? or empty??
+        Server previousSelectedServer = findServerBySanitizedName(Settings.selectedServerName);
+        setSelectedServer(previousSelectedServer == null ? official : previousSelectedServer);
+      } catch (Exception e) {
+        log.error(e);
+        setSelectedServer(official);
+      }
+    } else {
+      setSelectedServer(official);
+    }
+
+    _ctx.getApp().selectedServerChanged();
+  }
+
+  public void saveSelectedServer ()
+  {
+    String serverName = getSelectedServer().getSanitizedName();
+    if (serverName.isEmpty()) serverName = "official";
+    _settingsManager.setValue("launcher.selectedServerName", serverName);
+  }
+
+  public void saveSelectedServer (String serverName)
+  {
+    if (serverName.isEmpty()) serverName = "official";
+    _settingsManager.setValue("launcher.selectedServerName", serverName);
+  }
+
+  private JSONObject sendRequest (String method, String endpoint, String[] request)
+  {
+    try {
+      request = Arrays.copyOf(request, request.length + 1);
+      request[request.length - 1] = "version=" + TextUtil.extractNumeric(BuildConfig.getVersion());
+      return RequestUtil.makeRequest(method, "http://" + ADDRESS + ":" + PORT + endpoint, request);
+    } catch (Exception e) {
+      log.error("Request failed");
+      log.error(e);
+    }
+    return null;
+  }
+
   public List<Server> getServerList ()
   {
-    return this.serverList;
+    return this._serverList;
   }
 
   public void setServerList (List<Server> serverList)
   {
-    this.serverList = serverList;
+    this._serverList = serverList;
   }
 
   public Server getSelectedServer ()
   {
-    return this.selectedServer;
+    return this._selectedServer;
   }
 
   public void setSelectedServer (Server server)
   {
-    this.selectedServer = server;
+    if (server == null) {
+      log.warning("Tried to set a null server, what??");
+      return;
+    }
+
+    this._selectedServer = server;
+    _ctx.getApp().selectedServerChanged();
+    saveSelectedServer(server.getSanitizedName().toLowerCase());
   }
 
-  public boolean getOnline ()
+  public boolean isOnline ()
   {
-    return this.online;
+    return this._status != null;
   }
 
-  public void setOnline (boolean online)
+  public void setStatus (Status status) {
+    this._status = status;
+  }
+
+  public String getThirdPartyBaseDir ()
   {
-    this.online = online;
+    return THIRD_PARTY_BASE_DIR;
   }
 
+  @Inject protected LauncherContext _ctx;
+  @Inject protected SettingsManager _settingsManager;
+  @Inject protected LocaleManager _localeManager;
+
+  protected List<Server> _serverList = new ArrayList<>();
+  protected Server _selectedServer = null;
+  protected String _machineId = null;
+  protected Status _status = null;
+
+  private final String ADDRESS = DeployConfig.getFlamingoAddress();
+  private final int PORT = DeployConfig.getFlamingoPort();
+  private final String THIRD_PARTY_BASE_DIR = LauncherGlobals.USER_DIR + File.separator + "thirdparty" + File.separator;
 }

@@ -8,11 +8,9 @@ import com.lucasluqui.download.DownloadManager;
 import com.lucasluqui.download.data.URLDownloadQueue;
 import com.lucasluqui.launcher.setting.Settings;
 import com.lucasluqui.launcher.setting.SettingsManager;
+import com.lucasluqui.launcher.ui.BaseUI;
 import com.lucasluqui.swing.SmoothProgressBar;
-import com.lucasluqui.util.FileUtil;
-import com.lucasluqui.util.ImageUtil;
-import com.lucasluqui.util.ProcessUtil;
-import com.lucasluqui.util.ZipUtil;
+import com.lucasluqui.util.*;
 import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
@@ -25,21 +23,10 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.lucasluqui.launcher.Log.log;
+import static com.lucasluqui.launcher.ui.Log.log;
 
-public class JVMPatcher extends BaseGUI
+public class JVMPatcher extends BaseUI
 {
-  @Inject protected LauncherContext _launcherCtx;
-  @Inject protected LocaleManager _localeManager;
-  @Inject protected SettingsManager _settingsManager;
-  @Inject protected ModuleManager _moduleManager;
-  @Inject protected DownloadManager _downloadManager;
-  @Inject protected DiscordPresenceClient _discordPresenceClient;
-
-  private String path;
-  private boolean legacy;
-  private final Map<String, String> availableJVMs = new HashMap<String, String>();
-
   public JVMPatcher ()
   {
     super(500, 250, true);
@@ -47,10 +34,22 @@ public class JVMPatcher extends BaseGUI
 
   public void init (String path, boolean legacy)
   {
+    super.init();
     this.path = path;
     this.legacy = legacy;
     setAvailableJVMs();
     compose();
+  }
+
+  public void initFinished ()
+  {
+    super.initFinished();
+  }
+
+  @Override
+  public void loadOnline ()
+  {
+
   }
 
   private void setAvailableJVMs ()
@@ -96,9 +95,9 @@ public class JVMPatcher extends BaseGUI
     guiFrame.getContentPane().add(jvmSelectLabel);
 
     jvmComboBox = new JComboBox<>();
-    jvmComboBox.setBounds(125, 145, 255, 20);
+    jvmComboBox.setBounds(125, 145, 260, 25);
     jvmComboBox.setFocusable(false);
-    jvmComboBox.setFont(Fonts.getFont("defaultRegular", 11.0f, Font.ITALIC));
+    jvmComboBox.setFont(Fonts.getFont("defaultRegular", 12.0f, Font.BOLD));
     guiFrame.add(jvmComboBox);
 
     for (String key : this.availableJVMs.keySet()) {
@@ -116,6 +115,7 @@ public class JVMPatcher extends BaseGUI
     jvmPatcherProgressBar = new SmoothProgressBar();
     jvmPatcherProgressBar.setBounds(25, 204, 450, 25);
     jvmPatcherProgressBar.setVisible(false);
+    jvmPatcherProgressBar.setShouldPaintString(true);
     guiFrame.getContentPane().add(jvmPatcherProgressBar);
 
     buttonAccept = new JButton("Start patching");
@@ -141,7 +141,7 @@ public class JVMPatcher extends BaseGUI
 
     closeButton.addActionListener(e -> {
       if (Settings.jvmPatched) {
-        _launcherCtx.exit(true);
+        _ctx.getApp().exit(true);
       } else {
         Dialog.push(
           "On your first time launching you are required to patch a 64-bit Java VM\nand thus you cannot close this window.",
@@ -234,12 +234,22 @@ public class JVMPatcher extends BaseGUI
     System.exit(0);
   }
 
+  @Inject protected LauncherContext _ctx;
+  @Inject protected LocaleManager _localeManager;
+  @Inject protected SettingsManager _settingsManager;
+  @Inject protected ModuleManager _moduleManager;
+  @Inject protected DownloadManager _downloadManager;
+  @Inject protected DiscordPresenceClient _discordPresenceClient;
+
+  private String path;
+  private boolean legacy;
+  private final Map<String, String> availableJVMs = new HashMap<String, String>();
+
   private JLabel headerLabel;
   private JLabel subHeaderLabel;
   private JButton buttonAccept;
   private SmoothProgressBar jvmPatcherProgressBar;
   private JLabel jvmPatcherState;
   private JComboBox<String> jvmComboBox;
-
 }
 
