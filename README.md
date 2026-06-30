@@ -3,12 +3,12 @@
 </p>
 <h1 align="center">Knight Launcher</h1>
 <p align="center">
-    <a href="https://github.com/SirDank/KnightLauncher/blob/main/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/lucasluqui/KnightLauncher?style=flat-square"></a>
-    <a href="https://github.com/SirDank/KnightLauncher/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/lucasluqui/KnightLauncher?style=flat-square"></a>
-    <a href="https://github.com/SirDank/KnightLauncher/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/lucasluqui/KnightLauncher?style=flat-square"></a>
+    <a href="https://github.com/SirDank/KnightLauncher/blob/main/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/SirDank/KnightLauncher?style=flat-square"></a>
+    <a href="https://github.com/SirDank/KnightLauncher/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/SirDank/KnightLauncher?style=flat-square"></a>
+    <a href="https://github.com/SirDank/KnightLauncher/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/SirDank/KnightLauncher?style=flat-square"></a>
 </p>
 <p align="center">
-    <a href="https://github.com/SirDank/KnightLauncher/releases/"><img alt="Total downloads" src="https://img.shields.io/github/downloads/lucasluqui/KnightLauncher/total.svg"></a>
+    <a href="https://github.com/SirDank/KnightLauncher/releases/"><img alt="Total downloads" src="https://img.shields.io/github/downloads/SirDank/KnightLauncher/total.svg"></a>
     <a href="https://discord.gg/RAf499a"><img alt="Discord" src="https://img.shields.io/discord/653349356459786240" target="_blank"></a>
 </p>
 
@@ -105,7 +105,7 @@ Unless hyperlinked names shown below represent Discord usernames. Hyperlinked na
 
 ### Contributors
 <a href="https://github.com/SirDank/KnightLauncher/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=lucasluqui/KnightLauncher" />
+  <img src="https://contrib.rocks/image?repo=SirDank/KnightLauncher" />
 </a>
 
 ### Translators
