@@ -1,0 +1,7 @@
+-XX:+UseG1GC
+-XX:+DisableExplicitGC
+-XX:+UseStringDeduplication
+-XX:MaxGCPauseMillis=10
+-XX:+AlwaysPreTouch
+-Xms1G
+-Xmx1G

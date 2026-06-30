@@ -12,6 +12,7 @@ import com.lucasluqui.launcher.flamingo.data.Server;
 import com.lucasluqui.launcher.editor.ui.EditorsUI;
 import com.lucasluqui.util.JavaUtil;
 import com.lucasluqui.util.ProcessUtil;
+import com.lucasluqui.util.SystemUtil;
 
 import javax.swing.*;
 import java.io.File;
@@ -87,8 +88,47 @@ public class EditorsEventHandler
       if (thirdparty) classpath += LauncherGlobals.USER_DIR + File.separator + "./KnightLauncher.jar" + libSeparator;
       classpath += rootDir + File.separator + "./code/projectx-config.jar" + libSeparator;
       classpath += rootDir + File.separator + "./code/projectx-pcode.jar" + libSeparator;
-      classpath += rootDir + File.separator + "./code/lwjgl_util.jar" + libSeparator;
-      classpath += rootDir + File.separator + "./code/lwjgl.jar";
+      classpath += rootDir + File.separator + "./code/lwjgl.jar" + libSeparator;
+      classpath += rootDir + File.separator + "./code/lwjgl-opengl.jar" + libSeparator;
+      classpath += rootDir + File.separator + "./code/lwjgl-openal.jar" + libSeparator;
+      classpath += rootDir + File.separator + "./code/lwjgl-glfw.jar" + libSeparator;
+      classpath += rootDir + File.separator + "./code/lwjgl-jawt.jar" + libSeparator;
+      classpath += rootDir + File.separator + "./code/lwjgl3-awt.jar" + libSeparator;
+
+      if (SystemUtil.isWindows()) {
+        classpath += rootDir + File.separator + "./code/lwjgl-natives-windows.jar" + libSeparator;
+        classpath += rootDir + File.separator + "./code/lwjgl-opengl-natives-windows.jar" + libSeparator;
+        classpath += rootDir + File.separator + "./code/lwjgl-openal-natives-windows.jar" + libSeparator;
+        classpath += rootDir + File.separator + "./code/lwjgl-glfw-natives-windows.jar" + libSeparator;
+      }
+
+      if (SystemUtil.isMac()) {
+        if (SystemUtil.isARM()) {
+          classpath += rootDir + File.separator + "./code/lwjgl-natives-macos-arm64.jar" + libSeparator;
+          classpath += rootDir + File.separator + "./code/lwjgl-opengl-natives-macos-arm64.jar" + libSeparator;
+          classpath += rootDir + File.separator + "./code/lwjgl-openal-natives-macos-arm64.jar" + libSeparator;
+          classpath += rootDir + File.separator + "./code/lwjgl-glfw-natives-macos-arm64.jar" + libSeparator;
+        } else {
+          classpath += rootDir + File.separator + "./code/lwjgl-natives-macos.jar" + libSeparator;
+          classpath += rootDir + File.separator + "./code/lwjgl-opengl-natives-macos.jar" + libSeparator;
+          classpath += rootDir + File.separator + "./code/lwjgl-openal-natives-macos.jar" + libSeparator;
+          classpath += rootDir + File.separator + "./code/lwjgl-glfw-natives-macos.jar" + libSeparator;
+        }
+      }
+
+      if (SystemUtil.isUnix()) {
+        classpath += rootDir + File.separator + "./code/lwjgl-natives-linux.jar" + libSeparator;
+        classpath += rootDir + File.separator + "./code/lwjgl-opengl-natives-linux.jar" + libSeparator;
+        classpath += rootDir + File.separator + "./code/lwjgl-openal-natives-linux.jar" + libSeparator;
+        classpath += rootDir + File.separator + "./code/lwjgl-glfw-natives-linux.jar" + libSeparator;
+      }
+
+      // Just in case?
+      classpath += rootDir + File.separator + "./code/jshortcut.jar" + libSeparator;
+      classpath += rootDir + File.separator + "./code/commons-beanutils.jar" + libSeparator;
+      classpath += rootDir + File.separator + "./code/commons-digester.jar" + libSeparator;
+      classpath += rootDir + File.separator + "./code/commons-logging.jar";
+
 
       List<String> editorCmdLine = new ArrayList<>();
       editorCmdLine.add(JavaUtil.getGameJVMExePath());
@@ -99,6 +139,8 @@ public class EditorsEventHandler
       editorCmdLine.add("-Dcom.threerings.getdown=false");
       editorCmdLine.add("-Dorg.lwjgl.util.NoChecks=true");
       editorCmdLine.add("-Dsun.java2d.d3d=false");
+      editorCmdLine.add("-XX:-CreateCoredumpOnCrash");
+      editorCmdLine.add("-XX:+SuppressFatalErrorMessage");
       editorCmdLine.add("--add-opens=java.base/java.lang=ALL-UNNAMED");
       editorCmdLine.add("--add-opens=java.base/java.util=ALL-UNNAMED");
       editorCmdLine.add("--enable-native-access=ALL-UNNAMED");
@@ -129,13 +171,45 @@ public class EditorsEventHandler
       classpath += rootDir + File.separator + "./code/projectx-config.jar" + libSeparator;
       classpath += rootDir + File.separator + "./code/projectx-pcode.jar" + libSeparator;
       classpath += rootDir + File.separator + "./code/lwjgl.jar" + libSeparator;
-      classpath += rootDir + File.separator + "./code/lwjgl_util.jar" + libSeparator;
-      classpath += rootDir + File.separator + "./code/jinput.jar" + libSeparator;
-      classpath += rootDir + File.separator + "./code/jutils.jar" + libSeparator;
+      classpath += rootDir + File.separator + "./code/lwjgl-opengl.jar" + libSeparator;
+      classpath += rootDir + File.separator + "./code/lwjgl-openal.jar" + libSeparator;
+      classpath += rootDir + File.separator + "./code/lwjgl-glfw.jar" + libSeparator;
+      classpath += rootDir + File.separator + "./code/lwjgl-jawt.jar" + libSeparator;
+      classpath += rootDir + File.separator + "./code/lwjgl3-awt.jar" + libSeparator;
+
+      if (SystemUtil.isWindows()) {
+        classpath += rootDir + File.separator + "./code/lwjgl-natives-windows.jar" + libSeparator;
+        classpath += rootDir + File.separator + "./code/lwjgl-opengl-natives-windows.jar" + libSeparator;
+        classpath += rootDir + File.separator + "./code/lwjgl-openal-natives-windows.jar" + libSeparator;
+        classpath += rootDir + File.separator + "./code/lwjgl-glfw-natives-windows.jar" + libSeparator;
+      }
+
+      if (SystemUtil.isMac()) {
+        if (SystemUtil.isARM()) {
+          classpath += rootDir + File.separator + "./code/lwjgl-natives-macos-arm64.jar" + libSeparator;
+          classpath += rootDir + File.separator + "./code/lwjgl-opengl-natives-macos-arm64.jar" + libSeparator;
+          classpath += rootDir + File.separator + "./code/lwjgl-openal-natives-macos-arm64.jar" + libSeparator;
+          classpath += rootDir + File.separator + "./code/lwjgl-glfw-natives-macos-arm64.jar" + libSeparator;
+        } else {
+          classpath += rootDir + File.separator + "./code/lwjgl-natives-macos.jar" + libSeparator;
+          classpath += rootDir + File.separator + "./code/lwjgl-opengl-natives-macos.jar" + libSeparator;
+          classpath += rootDir + File.separator + "./code/lwjgl-openal-natives-macos.jar" + libSeparator;
+          classpath += rootDir + File.separator + "./code/lwjgl-glfw-natives-macos.jar" + libSeparator;
+        }
+      }
+
+      if (SystemUtil.isUnix()) {
+        classpath += rootDir + File.separator + "./code/lwjgl-natives-linux.jar" + libSeparator;
+        classpath += rootDir + File.separator + "./code/lwjgl-opengl-natives-linux.jar" + libSeparator;
+        classpath += rootDir + File.separator + "./code/lwjgl-openal-natives-linux.jar" + libSeparator;
+        classpath += rootDir + File.separator + "./code/lwjgl-glfw-natives-linux.jar" + libSeparator;
+      }
+
+      // Just in case?
       classpath += rootDir + File.separator + "./code/jshortcut.jar" + libSeparator;
       classpath += rootDir + File.separator + "./code/commons-beanutils.jar" + libSeparator;
       classpath += rootDir + File.separator + "./code/commons-digester.jar" + libSeparator;
-      classpath += rootDir + File.separator + "./code/commons-logging.jar" + libSeparator;
+      classpath += rootDir + File.separator + "./code/commons-logging.jar";
 
       List<String> editorCmdLine = new ArrayList<>();
       editorCmdLine.add(JavaUtil.getGameJVMExePath());
@@ -146,6 +220,8 @@ public class EditorsEventHandler
       editorCmdLine.add("-Dcom.threerings.getdown=false");
       editorCmdLine.add("-Dorg.lwjgl.util.NoChecks=true");
       editorCmdLine.add("-Dsun.java2d.d3d=false");
+      editorCmdLine.add("-XX:-CreateCoredumpOnCrash");
+      editorCmdLine.add("-XX:+SuppressFatalErrorMessage");
       editorCmdLine.add("--add-opens=java.base/java.lang=ALL-UNNAMED");
       editorCmdLine.add("--add-opens=java.base/java.util=ALL-UNNAMED");
       editorCmdLine.add("--enable-native-access=ALL-UNNAMED");

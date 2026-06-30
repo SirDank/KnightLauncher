@@ -1,5 +1,6 @@
 package com.lucasluqui.launcher.setting;
 
+import com.google.common.base.Charsets;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.lucasluqui.dialog.Dialog;
@@ -91,10 +92,11 @@ public class SettingsManager
 
     // Game settings
     Settings.gamePlatform = getValue("game.platform");
+    Settings.gameMemory = Integer.parseInt(getValue("game.memory"));
     Settings.gameDisableExplicitGC = Boolean.parseBoolean(getValue("game.disableExplicitGC"));
     Settings.gameUseCustomGC = Boolean.parseBoolean(getValue("game.useCustomGC"));
     Settings.gameGarbageCollector = getValue("game.garbageCollector.v2");
-    Settings.gameMemory = Integer.parseInt(getValue("game.memory"));
+    Settings.gameExtraPerfMode = Boolean.parseBoolean(getValue("game.extraPerfMode"));
     Settings.gameEndpoint = getValue("game.endpoint");
     Settings.gamePort = Integer.parseInt(getValue("game.port"));
     Settings.gamePublicKey = getValue("game.publicKey");
@@ -227,24 +229,45 @@ public class SettingsManager
 
       PrintWriter writer = new PrintWriter("extra.txt", "UTF-8");
 
-      if (Settings.gameUseStringDeduplication) writer.println("-XX:+UseStringDeduplication");
-      if (Settings.gameDisableExplicitGC) writer.println("-XX:+DisableExplicitGC");
+      if (Settings.gameExtraPerfMode) {
+        String extraPerfArgs = null;
+        try {
+          extraPerfArgs = com.google.common.io.Files.toString(
+            new File(LauncherGlobals.USER_DIR + File.separator + "KnightLauncher" + File.separator + "modules" + File.separator + "extra-perf" + File.separator + "extra-perf"),
+            Charsets.UTF_8
+          );
+        } catch (Exception e) {
+          log.error(e);
+        }
 
-      if (Settings.gameUseCustomGC) {
-        if (Settings.gameGarbageCollector.equals("Parallel")) {
-          writer.println("-XX:+UseParallelGC");
-        } else if (Settings.gameGarbageCollector.equals("ZGC")) {
-          writer.println("-XX:+Use" + Settings.gameGarbageCollector);
-          // TODO: Maybe add some extra settings for ZGC to use?
+        if (extraPerfArgs != null) {
+          writer.println(extraPerfArgs);
+        }
+      } else {
+        if (Settings.gameUseStringDeduplication) writer.println("-XX:+UseStringDeduplication");
+        if (Settings.gameDisableExplicitGC) writer.println("-XX:+DisableExplicitGC");
+
+        if (Settings.gameUseCustomGC) {
+          if (Settings.gameGarbageCollector.equals("Parallel")) {
+            writer.println("-XX:+UseParallelGC");
+          } else if (Settings.gameGarbageCollector.equals("ZGC")) {
+            writer.println("-XX:+Use" + Settings.gameGarbageCollector);
+            // TODO: Maybe add some extra settings for ZGC to use?
+          } else {
+            writer.println("-XX:+Use" + Settings.gameGarbageCollector + "GC");
+          }
+        }
+
+        if (Settings.gameUndecoratedWindow) writer.println("-Dorg.lwjgl.opengl.Window.undecorated=true");
+
+        if (Settings.gameGarbageCollector.equals("G1")) {
+          writer.println("-Xms" + Settings.gameMemory / 2 + "M");
+          writer.println("-Xmx" + Settings.gameMemory + "M");
         } else {
-          writer.println("-XX:+Use" + Settings.gameGarbageCollector + "GC");
+          writer.println("-Xms" + Settings.gameMemory + "M");
+          writer.println("-Xmx" + Settings.gameMemory + "M");
         }
       }
-
-      if (Settings.gameUndecoratedWindow) writer.println("-Dorg.lwjgl.opengl.Window.undecorated=true");
-
-      writer.println("-Xms" + Settings.gameMemory + "M");
-      writer.println("-Xmx" + Settings.gameMemory + "M");
 
       // Get rid of this "0" bug. Maybe delete this one day
       if (Settings.gameAdditionalArgs.equalsIgnoreCase("0")) {
@@ -254,7 +277,7 @@ public class SettingsManager
 
       // And now we validate all (possibly) REAL args.
       if (validAdditionalArgs(Settings.gameAdditionalArgs)) {
-        writer.println(Settings.gameAdditionalArgs);
+        writer.println(filterAdditionalArgs(Settings.gameAdditionalArgs));
       } else {
         Dialog.push(
           _localeManager.getValue("m.invalid_additional_args_warning"),
@@ -288,8 +311,6 @@ public class SettingsManager
     // iterate through all args.
     List<String> args = Arrays.asList(argString.split("\\r?\\n"));
     for (String arg : args) {
-      log.info("validAdditionalArgs", "arg", arg);
-
       // invalid arg? mark the whole thing as invalid.
       if (!JavaUtil.validJVMArg(arg)) {
         log.info("Ignoring all additional args due to invalid JVM arg", "arg", arg);
@@ -301,6 +322,28 @@ public class SettingsManager
     return true;
   }
 
+  public String filterAdditionalArgs (String argString)
+  {
+    if (argString.isEmpty()) return argString;
+
+    // iterate through all args.
+    List<String> args = Arrays.asList(argString.split("\\r?\\n"));
+    for (String arg : args) {
+      // filter out stuff we don't want while in extra perf mode.
+      if (Settings.gameExtraPerfMode) {
+        if (arg.startsWith("-Xms") || arg.startsWith("-Xmx")) {
+          args.remove(arg);
+        }
+      }
+
+      // any other filters, if any, should go here below.
+    }
+
+    // return the filtered args as a single string.
+    return String.join(System.lineSeparator(), args);
+  }
+
+  // TODO: Fix this. jar tool isn't bundled anymore.
   private void applyConnectionSettings ()
   {
     String deployPropStr = null;
@@ -372,6 +415,6 @@ public class SettingsManager
   private HashMap<String, Object> _migrationMap = new HashMap<>();
   private boolean _migrating = false;
 
-  private final String PROP_VER = "30";
+  private final String PROP_VER = "31";
   private final String PROP_PATH = LauncherGlobals.USER_DIR + File.separator + "KnightLauncher.properties";
 }

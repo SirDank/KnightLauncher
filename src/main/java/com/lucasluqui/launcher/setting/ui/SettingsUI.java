@@ -367,10 +367,10 @@ public class SettingsUI extends BaseUI
     choiceGC.setFocusable(false);
     choiceGC.setFont(Fonts.getFont("codeRegular", 12.0f, Font.BOLD));
     gamePanel.add(choiceGC);
-    choiceGC.addItem("Parallel");
-    choiceGC.addItem("ZGC");
-    choiceGC.addItem("Serial");
     choiceGC.addItem("G1");
+    choiceGC.addItem("Parallel");
+    choiceGC.addItem("Serial");
+    choiceGC.addItem("ZGC");
     choiceGC.setSelectedItem(Settings.gameGarbageCollector);
     choiceGC.addItemListener(eventHandler::choiceGCChangeEvent);
     choiceGC.setEnabled(SystemUtil.is64Bit());
@@ -1054,8 +1054,6 @@ public class SettingsUI extends BaseUI
   @Inject protected SettingsManager _settingsManager;
   @Inject protected FlamingoManager _flamingoManager;
 
-  private final String URL_JVM_ARG_DOCS = "https://docs.oracle.com/en/java/javase/21/docs/specs/man/java.html#advanced-options-for-java";
-
   public JTabbedPane tabbedPane;
   public JComboBox<String> choicePlatform = new JComboBox<String>();
   public JComboBox<String> choiceLanguage;
@@ -1101,4 +1099,6 @@ public class SettingsUI extends BaseUI
   public JLabel labelFilePurging;
   public JLabel labelFilePurgingExplained;
   public JCheckBox switchFilePurging;
+
+  private final String URL_JVM_ARG_DOCS = "https://docs.oracle.com/en/java/javase/25/docs/specs/man/java.html#advanced-options-for-java";
 }

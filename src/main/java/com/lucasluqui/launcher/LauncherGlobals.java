@@ -38,7 +38,7 @@ public class LauncherGlobals
       javaPath,
       "-Dsun.java2d.d3d=false",
       "-Dcheck_unpacked=true",
-      "-Dsilent=noupdate",
+      "-Dsilent=launch",
       "-jar",
       "./getdown-pro.jar",
       ".",
@@ -49,7 +49,7 @@ public class LauncherGlobals
       "java",
       "-Dsun.java2d.d3d=false",
       "-Dcheck_unpacked=true",
-      "-Dsilent=noupdate",
+      "-Dsilent=launch",
       "-jar",
       "./getdown-pro.jar",
       ".",
@@ -60,7 +60,7 @@ public class LauncherGlobals
       javaPath,
       "-Dsun.java2d.d3d=false",
       "-Dcheck_unpacked=true",
-      "-Dsilent=noupdate",
+      "-Dsilent=launch",
       "-jar",
       USER_DIR + File.separator + "getdown-pro.jar",
       ".",
@@ -74,15 +74,31 @@ public class LauncherGlobals
       USER_DIR + File.separator + "./code/projectx-config.jar" + javaSeparator +
       USER_DIR + File.separator + "./code/projectx-pcode.jar" + javaSeparator +
       USER_DIR + File.separator + "./code/lwjgl.jar" + javaSeparator +
-      USER_DIR + File.separator + "./code/lwjgl_util.jar" + javaSeparator +
-      USER_DIR + File.separator + "./code/jinput.jar" + javaSeparator +
-      USER_DIR + File.separator + "./code/jutils.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl-opengl.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl-openal.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl-glfw.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl-jawt.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl3-jawt.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl-natives-windows.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl-opengl-natives-windows.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl-openal-natives-windows.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl-glfw-natives-windows.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl-natives-macos.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl-opengl-natives-macos.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl-openal-natives-macos.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl-glfw-natives-macos.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl-natives-macos-arm64.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl-opengl-natives-macos-arm64.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl-openal-natives-macos-arm64.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl-glfw-natives-macos-arm64.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl-natives-linux.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl-opengl-natives-linux.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl-openal-natives-linux.jar" + javaSeparator +
+      USER_DIR + File.separator + "./code/lwjgl-glfw-natives-linux.jar" + javaSeparator +
       USER_DIR + File.separator + "./code/jshortcut.jar" + javaSeparator +
       USER_DIR + File.separator + "./code/commons-beanutils.jar" + javaSeparator +
       USER_DIR + File.separator + "./code/commons-digester.jar" + javaSeparator +
-      USER_DIR + File.separator + "./code/commons-logging.jar" + javaSeparator +
-      USER_DIR + File.separator + "./code/discord-game-sdk4j.jar" + javaSeparator +
-      USER_DIR + File.separator + "./code/gson.jar" + javaSeparator,
+      USER_DIR + File.separator + "./code/commons-logging.jar",
       "-Dcom.threerings.getdown=false",
       "-Xms512M",
       "-Xmx512M",
@@ -91,6 +107,8 @@ public class LauncherGlobals
       "-Djava.library.path=" + USER_DIR + File.separator + "./native",
       "-Dorg.lwjgl.util.NoChecks=true",
       "-Dsun.java2d.d3d=false",
+      "-XX:-CreateCoredumpOnCrash",
+      "-XX:+SuppressFatalErrorMessage",
       "--add-opens=java.base/java.lang=ALL-UNNAMED",
       "--add-opens=java.base/java.util=ALL-UNNAMED",
       "--enable-native-access=ALL-UNNAMED",
